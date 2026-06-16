@@ -193,6 +193,45 @@ const CHANNELS = [
     description: 'FIFA WM 2026',
   },
   {
+    id: 'fussball-tv-1-uhd',
+    name: 'Fussball.TV1 (UHD/4K)',
+    emoji: '⚽',
+    logo: 'https://statics.foxsports.com/www.foxsports.com/content/uploads/2023/05/IMG_6227.png',
+    url: 'https://rajutv.pages.dev/hls?url=http%3A%2F%2Fpremiumtvs.space%3A80%2Flive%2F1Aoen7elp5%2FIgMJ60tmAa%2F745269.ts',
+    quality: 'UHD/4K',
+    protocol: 'HLS Proxy',
+    color: 'linear-gradient(135deg, rgba(200,50,50,0.15), rgba(100,0,0,0.05))',
+    language: 'German',
+    category: 'Sports',
+    description: 'FIFA WM 2026 4K',
+  },
+  {
+    id: 'rtb-go',
+    name: 'RTB Go live',
+    emoji: '📺',
+    logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxsoXoKYsS_leK30qY252Jsrt0HDnXMRpezWD8TRtZzA&s=10',
+    url: 'https://d1211whpimeups.cloudfront.net/smil:rtbgo/chunklist_b4096000_slENG.m3u8',
+    quality: '1080p',
+    protocol: 'HLS',
+    color: 'linear-gradient(135deg, rgba(20,20,200,0.15), rgba(10,10,100,0.05))',
+    language: 'English',
+    category: 'Sports',
+    description: 'RTB Go Live Stream',
+  },
+  {
+    id: 'dazn-tv',
+    name: 'DA ZN tv',
+    emoji: '📺',
+    logo: 'https://d1sgwhnao7452x.cloudfront.net/dazn-og.jpg',
+    url: 'https://1nyaler.streamhostingcdn.top/stream/94/index.m3u8',
+    quality: '1080p',
+    protocol: 'HLS',
+    color: 'linear-gradient(135deg, rgba(255,255,0,0.15), rgba(200,200,0,0.05))',
+    language: 'Spanish',
+    category: 'Sports',
+    description: 'DAZN Sports Live',
+  },
+  {
     id: 'ss-world-cup-central',
     name: 'SS World Cup Central',
     emoji: '⚽',
@@ -298,7 +337,7 @@ function renderChannelCards() {
     btnWrap.style.display = 'flex';
     btnWrap.style.justifyContent = 'center';
     btnWrap.style.margin = '10px 0 20px';
-    
+
     const btn = document.createElement('button');
     btn.className = 'see-more-btn';
     btn.textContent = 'See More Live Channels';
@@ -360,7 +399,7 @@ function renderApiMatchCard(event) {
 
   const scoreBlock = state === 'pre'
     ? `<div class="match-vs">VS</div><div class="card-timer" data-datetime="${event.date}"></div>`
-    : `<div class="match-score">${scoreH} – ${scoreA}</div><div class="match-time-detail">${state==='in'?(event.status?.displayClock||'LIVE'):'FT'}</div>`;
+    : `<div class="match-score">${scoreH} – ${scoreA}</div><div class="match-time-detail">${state === 'in' ? (event.status?.displayClock || 'LIVE') : 'FT'}</div>`;
 
   // Safely use getFlag from scoreboard.js if available
   const flagHome = typeof getFlag !== 'undefined' ? getFlag(homeAbbr) : '⚽';
@@ -391,23 +430,23 @@ function renderApiMatchCard(event) {
 async function renderSchedule() {
   const grid = document.getElementById('scheduleGrid');
   if (!grid) return;
-  
+
   grid.innerHTML = '<div style="grid-column: 1 / -1; display:flex; justify-content:center; align-items:center; height:200px;"><div class="loader-ring"></div></div>';
-  
+
   try {
     const res = await fetch('/api/schedule?dates=20260611-20260719');
     if (!res.ok) throw new Error('API Error');
     const data = await res.json();
     const events = data.events || [];
-    
+
     // Sort events sequentially
     events.sort((a, b) => new Date(a.date) - new Date(b.date));
-    
+
     const past = events.filter(e => e.status?.type?.state === 'post');
     const upcoming = events.filter(e => e.status?.type?.state !== 'post');
-    
+
     let html = '';
-    
+
     const pastLimit = window.innerWidth <= 768 ? 3 : 8;
     if (past.length > 0) {
       html += `<div style="grid-column: 1 / -1; color: var(--gold); font-size: 1.4rem; font-weight: 800; font-family: var(--font-display); letter-spacing: 2px; margin-top: 10px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 10px;">
@@ -425,7 +464,7 @@ async function renderSchedule() {
         </div>`;
       }
     }
-    
+
     const upLimit = window.innerWidth <= 768 ? 3 : 8;
     if (upcoming.length > 0) {
       html += `<div style="grid-column: 1 / -1; color: var(--gold); font-size: 1.4rem; font-weight: 800; font-family: var(--font-display); letter-spacing: 2px; margin-top: 40px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 10px;">
@@ -443,7 +482,7 @@ async function renderSchedule() {
         </div>`;
       }
     }
-    
+
     grid.innerHTML = html || '<p style="grid-column: 1 / -1; text-align: center; color: rgba(255,255,255,0.5);">No matches scheduled yet.</p>';
 
     // Initialize Hero Timer with the next scheduled match
@@ -1353,8 +1392,8 @@ function initTimer(nextMatch) {
       const dt = el.getAttribute('data-datetime');
       if (dt) {
         let mDate = new Date(dt);
-        if (isNaN(mDate.getTime())) mDate = new Date(new Date().getTime() + 24*60*60*1000);
-        
+        if (isNaN(mDate.getTime())) mDate = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
+
         const diff2 = mDate - now;
         if (diff2 <= 0) {
           el.textContent = 'LIVE SOON';
@@ -1363,7 +1402,7 @@ function initTimer(nextMatch) {
           const hh = Math.floor((diff2 / (1000 * 60 * 60)) % 24);
           const mm = Math.floor((diff2 / 1000 / 60) % 60);
           const ss = Math.floor((diff2 / 1000) % 60);
-          
+
           if (dd > 0) {
             el.textContent = `in ${dd}d ${hh}h ${mm}m`;
           } else {
