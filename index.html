@@ -64,6 +64,10 @@
       </nav>
 
       <div class="header-right">
+        <div class="total-online-pill" id="totalOnlinePill" style="display:none; margin-right: 12px; background: rgba(0, 200, 83, 0.15); border: 1px solid rgba(0, 200, 83, 0.4); padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; color: #00e676; display: flex; align-items: center; gap: 6px;">
+          <span class="online-dot-anim" style="width: 6px; height: 6px; background: #00e676; border-radius: 50%; box-shadow: 0 0 8px #00e676; animation: pulseOnline 1.5s infinite;"></span>
+          <span id="totalOnlineCount">0</span> Online
+        </div>
         <div class="live-pill">
           <span class="live-dot-anim"></span>
           LIVE NOW
@@ -163,6 +167,7 @@
             <div class="now-dot"></div>
             <span class="now-label">Now Playing:</span>
             <span class="now-name" id="nowPlayingName">Select a channel</span>
+            <span class="channel-viewers" id="channelViewers" style="display: none; margin-left: 10px; font-size: 0.85rem; color: #aaa; background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 4px;">(<span id="channelViewerCount">0</span> watching)</span>
           </div>
           <div class="topbar-actions">
             <button class="tbar-btn" title="Picture in Picture" onclick="togglePiP()">⛶ PiP</button>
@@ -376,7 +381,8 @@
     </div>
   </footer>
 
-  <!-- Video Libraries -->
+  <!-- Video Libraries & Scripts -->
+  <script src="/socket.io/socket.io.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.7/dist/hls.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mpegts.js@1.7.3/dist/mpegts.min.js"></script>
   <script src="app.js"></script>

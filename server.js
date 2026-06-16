@@ -2,9 +2,56 @@ const express = require('express');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const cors = require('cors');
 const path = require('path');
+const http = require('http');
+const { Server } = require('socket.io');
 
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server, { cors: { origin: '*' } });
+
 const PORT = process.env.PORT || 4200;
+
+// -- Real-Time Viewer Tracking --
+let totalOnline = 0;
+const channelViewers = {}; // { 'channel-id': count }
+
+io.on('connection', (socket) => {
+  totalOnline++;
+  let currentChannel = null;
+
+  // Broadcast updated total online count
+  io.emit('viewer_update', { type: 'total', count: totalOnline });
+
+  // When a client requests the current total immediately on connection
+  socket.emit('viewer_update', { type: 'total', count: totalOnline });
+
+  socket.on('join_channel', (channelId) => {
+    // Leave previous channel room
+    if (currentChannel) {
+      socket.leave(currentChannel);
+      channelViewers[currentChannel] = Math.max(0, (channelViewers[currentChannel] || 1) - 1);
+      io.to(currentChannel).emit('viewer_update', { type: 'channel', channelId: currentChannel, count: channelViewers[currentChannel] });
+    }
+
+    // Join new channel room
+    currentChannel = channelId;
+    if (currentChannel) {
+      socket.join(currentChannel);
+      channelViewers[currentChannel] = (channelViewers[currentChannel] || 0) + 1;
+      io.to(currentChannel).emit('viewer_update', { type: 'channel', channelId: currentChannel, count: channelViewers[currentChannel] });
+    }
+  });
+
+  socket.on('disconnect', () => {
+    totalOnline = Math.max(0, totalOnline - 1);
+    io.emit('viewer_update', { type: 'total', count: totalOnline });
+
+    if (currentChannel) {
+      channelViewers[currentChannel] = Math.max(0, (channelViewers[currentChannel] || 1) - 1);
+      io.to(currentChannel).emit('viewer_update', { type: 'channel', channelId: currentChannel, count: channelViewers[currentChannel] });
+    }
+  });
+});
 
 // Enable CORS for all routes
 app.use(cors());
@@ -94,7 +141,7 @@ app.get('/api/match/:id', (req, res) => {
   espnFetch(`${ESPN_BASE}/summary?event=${req.params.id}`, res);
 });
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Free Tv Server running on http://localhost:${PORT}`);
 });
 

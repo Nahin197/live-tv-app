@@ -171,6 +171,7 @@ const CHANNELS = [
 // ────────────────────────────────────────────────────────────
 // STATE
 // ────────────────────────────────────────────────────────────
+const socket = io();
 let hlsInstance = null;
 let mpegtsInstance = null;
 let currentChannel = null;
@@ -313,6 +314,13 @@ function playChannel(channel) {
 
   currentChannel = channel;
   retryCount = 0;
+
+  // Track viewer in real-time
+  socket.emit('join_channel', channel.id);
+  const viewersEl = document.getElementById('channelViewers');
+  if (viewersEl) viewersEl.style.display = 'inline-block';
+  const vCountEl = document.getElementById('channelViewerCount');
+  if (vCountEl) vCountEl.innerText = '1';
 
   // Update UI highlights
   document.querySelectorAll('.channel-card').forEach(c => c.classList.remove('active'));
@@ -1107,6 +1115,27 @@ document.getElementById('menuToggle').addEventListener('click', () => {
         z-index: 999;
         backdrop-filter: blur(20px);
       `;
+    }
+  }
+});
+
+// ────────────────────────────────────────────────────────────
+// SOCKET.IO REAL-TIME VIEWERS
+// ────────────────────────────────────────────────────────────
+socket.on('viewer_update', (data) => {
+  if (data.type === 'total') {
+    const totalPill = document.getElementById('totalOnlinePill');
+    const totalCount = document.getElementById('totalOnlineCount');
+    if (totalPill && totalCount) {
+      totalPill.style.display = 'flex';
+      totalCount.innerText = data.count;
+    }
+  } else if (data.type === 'channel') {
+    if (currentChannel && data.channelId === currentChannel.id) {
+      const channelViewerCount = document.getElementById('channelViewerCount');
+      if (channelViewerCount) {
+        channelViewerCount.innerText = data.count;
+      }
     }
   }
 });
