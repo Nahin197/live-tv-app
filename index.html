@@ -125,18 +125,35 @@
         </div>
         <div class="stat-divider"></div>
         <div class="stat-chip">
-          <span class="chip-num">48</span>
+          <span class="chip-num">104</span>
           <span class="chip-label">Matches</span>
         </div>
+      </div>
+
+      <!-- Next Match Timer -->
+      <div class="next-match-timer" id="nextMatchTimer" style="display: none;">
+        <div class="timer-eyebrow">⏰ NEXT MATCH STARTS IN</div>
+        <div class="timer-countdown" id="timerCountdown">
+          <div class="time-box"><span id="t-days">00</span><small>DAYS</small></div>
+          <div class="time-sep">:</div>
+          <div class="time-box"><span id="t-hours">00</span><small>HRS</small></div>
+          <div class="time-sep">:</div>
+          <div class="time-box"><span id="t-mins">00</span><small>MIN</small></div>
+          <div class="time-sep">:</div>
+          <div class="time-box"><span id="t-secs">00</span><small>SEC</small></div>
+        </div>
+        <div class="timer-match-name" id="timerMatchName">Loading match...</div>
+      </div>
+
+      <!-- Scroll down indicator (now nested so it reliably tracks below the timer) -->
+      <div class="scroll-down" onclick="scrollToPlayer()">
+        <div class="scroll-chevron"></div>
       </div>
     </div>
 
     <div class="hero-ball-wrap">
       <img src="wc_ball.png" alt="World Cup Ball" class="hero-ball" />
     </div>
-
-    <div class="scroll-down" onclick="scrollToChannels()">
-      <div class="scroll-chevron"></div>
     </div>
   </section>
 
@@ -268,6 +285,13 @@
               <div class="stat-pill-val" id="protocolInfo">—</div>
             </div>
           </div>
+          <div class="stat-pill">
+            <span class="stat-pill-icon">🗣️</span>
+            <div>
+              <div class="stat-pill-label">Language</div>
+              <div class="stat-pill-val" id="languageInfo">—</div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -284,6 +308,18 @@
           <div class="shortcut-row"><span class="key">↑ ↓</span> Volume</div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- ====== SCHEDULE ====== -->
+  <section class="section schedule-section" id="schedule-section">
+    <div class="section-header">
+      <div class="section-eyebrow">📅 TOURNAMENT CALENDAR</div>
+      <h2 class="section-title">Full <span class="gold">Schedule</span></h2>
+      <p class="section-sub">Browse all 104 upcoming and past matches</p>
+    </div>
+    <div class="schedule-grid" id="scheduleGrid">
+      <!-- Injected by app.js -->
     </div>
   </section>
 

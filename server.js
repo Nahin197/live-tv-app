@@ -77,6 +77,10 @@ app.use('/proxy', (req, res, next) => {
     target: target.origin,
     changeOrigin: true,
     pathRewrite: () => target.pathname + target.search,
+    onProxyReq: (proxyReq, req, res) => {
+      // Spoof User-Agent to bypass blocks on IPTV streams
+      proxyReq.setHeader('User-Agent', 'Mozilla/5.0');
+    },
     onProxyRes: (proxyRes, req, res) => {
       // Add CORS headers to the response
       proxyRes.headers['Access-Control-Allow-Origin'] = '*';
@@ -103,14 +107,28 @@ app.use(express.static(path.join(__dirname, '')));
 const ESPN_BASE = 'https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world';
 const ESPN_V2   = 'https://site.api.espn.com/apis/v2/sports/soccer/fifa.world';
 
-async function espnFetch(url, res) {
+const cache = new Map();
+
+async function espnFetch(url, res, ttl = 30000) {
   try {
+    const now = Date.now();
+    const cached = cache.get(url);
+    // Return cached data if valid
+    if (cached && (now - cached.timestamp < ttl)) {
+      res.setHeader('Cache-Control', `public, max-age=${Math.floor(ttl/1000)}`);
+      return res.json(cached.data);
+    }
+
     const r = await fetch(url, {
       headers: { 'User-Agent': 'Mozilla/5.0', 'Accept': 'application/json' }
     });
     if (!r.ok) throw new Error(`ESPN returned ${r.status}`);
     const data = await r.json();
-    res.setHeader('Cache-Control', 'no-cache');
+    
+    // Save to cache
+    cache.set(url, { timestamp: now, data });
+
+    res.setHeader('Cache-Control', `public, max-age=${Math.floor(ttl/1000)}`);
     res.json(data);
   } catch (e) {
     console.error('ESPN fetch error:', e.message);

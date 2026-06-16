@@ -3,20 +3,7 @@
    app.js — Live streaming with HLS.js + quality control + PiP
    ============================================================ */
 
-// ────────────────────────────────────────────────────────────
-// MATCH SCHEDULE DATA
-// ────────────────────────────────────────────────────────────
-const SCHEDULE = [
-  { home:'🇧🇷 Brazil',    away:'🇦🇷 Argentina',  scoreH:2,  scoreA:1,  status:'live',     time:"73'",  group:'Group C', datetime:'Jun 16, 19:00' },
-  { home:'🇫🇷 France',    away:'🇩🇪 Germany',    scoreH:0,  scoreA:0,  status:'live',     time:"34'",  group:'Group F', datetime:'Jun 16, 21:00' },
-  { home:'🇵🇹 Portugal',  away:'🇲🇦 Morocco',    scoreH:3,  scoreA:0,  status:'finished', time:'FT',   group:'Group H', datetime:'Jun 16, 15:00' },
-  { home:'🇪🇸 Spain',     away:'🏴󠁧󠁢󠁥󠁮󠁧󠁿 England',   scoreH:1,  scoreA:2,  status:'live',     time:"67'",  group:'Group D', datetime:'Jun 16, 18:00' },
-  { home:'🇺🇸 USA',       away:'🇲🇽 Mexico',     scoreH:1,  scoreA:1,  status:'live',     time:'HT',   group:'Group A', datetime:'Jun 16, 20:00' },
-  { home:'🇯🇵 Japan',     away:'🇰🇷 South Korea',scoreH:2,  scoreA:0,  status:'finished', time:'FT',   group:'Group E', datetime:'Jun 16, 13:00' },
-  { home:'🇳🇱 Netherlands',away:'🇸🇦 Saudi Arabia',scoreH:null,scoreA:null,status:'upcoming',time:'',  group:'Group B', datetime:'Jun 17, 15:00' },
-  { home:'🇨🇷 Croatia',   away:'🇧🇪 Belgium',    scoreH:null,scoreA:null,status:'upcoming',time:'',   group:'Group G', datetime:'Jun 17, 18:00' },
-  { home:'🇨🇦 Canada',    away:'🇷🇸 Serbia',     scoreH:null,scoreA:null,status:'upcoming',time:'',   group:'Group A', datetime:'Jun 17, 21:00' },
-];
+// MATCH SCHEDULE IS NOW FETCHED DYNAMICALLY VIA API
 
 // ────────────────────────────────────────────────────────────
 // CHANNEL DATA
@@ -31,6 +18,7 @@ const CHANNELS = [
     quality: '1080p HLS',
     protocol: 'HLS',
     color: 'linear-gradient(135deg, rgba(79,172,254,0.15), rgba(0,242,254,0.05))',
+    language: 'Portuguese',
     category: 'Sports',
     description: 'Brazilian Sports',
   },
@@ -43,6 +31,7 @@ const CHANNELS = [
     quality: 'HD HLS',
     protocol: 'HLS',
     color: 'linear-gradient(135deg, rgba(255,107,53,0.15), rgba(255,60,172,0.05))',
+    language: 'Spanish',
     category: 'Sports',
     description: 'D Sports Live',
   },
@@ -54,6 +43,7 @@ const CHANNELS = [
     quality: 'HD HLS',
     protocol: 'HLS',
     color: 'linear-gradient(135deg, rgba(116,172,223,0.15), rgba(255,255,255,0.05))',
+    language: 'Spanish',
     category: 'Sports',
     description: 'TyC Sports Live',
   },
@@ -66,6 +56,7 @@ const CHANNELS = [
     quality: 'HD HLS',
     protocol: 'HLS',
     color: 'linear-gradient(135deg, rgba(230,0,0,0.15), rgba(255,100,100,0.05))',
+    language: 'English',
     category: 'Sports',
     description: 'TSN Sports Live',
   },
@@ -76,9 +67,10 @@ const CHANNELS = [
     emoji: '⚽',
     logo: 'https://logowik.com/content/uploads/images/bein-sports-png2285.logowik.com.webp',
     url: 'https://1nyaler.streamhostingcdn.top/stream/23/index.m3u8',
-    quality: 'HD HLS',
+    quality: '1080p',
     protocol: 'HLS',
     color: 'linear-gradient(135deg, rgba(0,200,255,0.12), rgba(79,172,254,0.05))',
+    language: 'French',
     category: 'Football',
     description: 'Bein Sports Live',
   },
@@ -88,9 +80,10 @@ const CHANNELS = [
     emoji: '🏅',
     logo: 'https://logowik.com/content/uploads/images/win-sports6956.logowik.com.webp',
     url: 'https://1nyaler.streamhostingcdn.top/stream/32/index.m3u8',
-    quality: 'HD HLS',
+    quality: '4K',
     protocol: 'HLS',
     color: 'linear-gradient(135deg, rgba(138,43,226,0.12), rgba(255,107,53,0.05))',
+    language: 'Spanish',
     category: 'Sports',
     description: 'Win Sports Live',
   },
@@ -100,9 +93,10 @@ const CHANNELS = [
     emoji: '🔴',
     logo: 'https://assets.goal.com/images/v3/blt0da91b1c9b8e431d/bein%20sports%20xtra%20logo.jpg',
     url: 'https://bein-xtra-bein.amagi.tv/playlistR480p.m3u8',
-    quality: '480p HLS',
+    quality: '720p',
     protocol: 'HLS',
     color: 'linear-gradient(135deg, rgba(220,38,38,0.15), rgba(239,68,68,0.05))',
+    language: 'English',
     category: 'Sports',
     description: 'BeIN Xtra Live',
   },
@@ -114,6 +108,7 @@ const CHANNELS = [
     quality: 'HD HLS',
     protocol: 'HLS',
     color: 'linear-gradient(135deg, rgba(220,38,38,0.15), rgba(239,68,68,0.05))',
+    language: 'English',
     category: 'Sports',
     description: 'Thiendinh TV China Live',
   },
@@ -124,9 +119,10 @@ const CHANNELS = [
     emoji: '🇨🇳',
     logo: 'https://variety.com/wp-content/uploads/2020/12/CCTV-logo.jpg?w=1000&h=575&crop=1',
     url: 'https://live12.szyac.com/live/85042987.m3u8',
-    quality: 'HD HLS',
+    quality: '1080p',
     protocol: 'HLS',
     color: 'linear-gradient(135deg, rgba(220,38,38,0.15), rgba(239,68,68,0.05))',
+    language: 'Chinese',
     category: 'Sports',
     description: 'CCTV China Live',
   },
@@ -136,9 +132,10 @@ const CHANNELS = [
     emoji: '📰',
     logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZzSj1cK5jkXileb7UvL4qNnAcgfCVLqzLtg&s',
     url: 'https://live.thebosstv.com:30443/dwlive/Somoy-TV/chunks.m3u8',
-    quality: 'HD HLS',
+    quality: '720p',
     protocol: 'HLS',
     color: 'linear-gradient(135deg, rgba(255,87,34,0.15), rgba(255,193,7,0.05))',
+    language: 'Bangla',
     category: 'News',
     description: 'Somoy TV Live',
   },
@@ -151,6 +148,7 @@ const CHANNELS = [
     quality: 'HD HLS',
     protocol: 'HLS',
     color: 'linear-gradient(135deg, rgba(244,67,54,0.15), rgba(233,30,99,0.05))',
+    language: 'English',
     category: 'Sports',
     description: 'ColaTV 99 Live Stream',
   },
@@ -160,11 +158,52 @@ const CHANNELS = [
     emoji: '📺',
     logo: 'https://yt3.googleusercontent.com/3_f350mZQuocm7Lx2eASxHJHG5s5ynrrD0cQaIMeUMpDSYyz29J5FCHqnl14AXsV19D71qDUdg=s900-c-k-c0x00ffffff-no-rj',
     url: 'https://d1g8wgjurz8via.cloudfront.net/bpk-tv/ColorsHD/default/ColorsHD-video=2137600.m3u8',
-    quality: 'HD HLS',
+    quality: '720p',
     protocol: 'HLS',
     color: 'linear-gradient(135deg, rgba(255,152,0,0.15), rgba(255,87,34,0.05))',
+    language: 'Bangla',
     category: 'Entertainment',
     description: 'Z Bangla Live',
+  },
+  {
+    id: 'fifa-plus-us',
+    name: 'FIFA+ (Samsung TV Plus)',
+    emoji: '⚽',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/FIFA%2B_%282025%29.svg/960px-FIFA%2B_%282025%29.svg.png',
+    url: 'https://d2w9q46ikgrcwx.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-of5cbk3sav3w5/v1/sysdata_s_p_a_fifa_7/samsungheadend_us/latest/main/hls/playlist.m3u8',
+    quality: '360p - 720p',
+    protocol: 'HLS',
+    color: 'linear-gradient(135deg, rgba(0,0,255,0.15), rgba(0,0,100,0.05))',
+    language: 'English',
+    category: 'Sports',
+    description: 'FIFA+ Live (Master Playlist)',
+  },
+
+  {
+    id: 'fussball-tv-1',
+    name: 'Fussball .TV 1',
+    emoji: '⚽',
+    logo: 'https://statics.foxsports.com/www.foxsports.com/content/uploads/2023/05/IMG_6227.png',
+    url: 'https://rajutv.pages.dev/hls?url=http%3A%2F%2Fpremiumtvs.space%3A80%2Flive%2F1Aoen7elp5%2FIgMJ60tmAa%2F742610.ts',
+    quality: '1080p',
+    protocol: 'HLS Proxy',
+    color: 'linear-gradient(135deg, rgba(200,50,50,0.15), rgba(100,0,0,0.05))',
+    language: 'German',
+    category: 'Sports',
+    description: 'FIFA WM 2026',
+  },
+  {
+    id: 'ss-world-cup-central',
+    name: 'SS World Cup Central',
+    emoji: '⚽',
+    logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8iKfA2WuJVsdI3zhiC34VwCjskg7sipKZnw&s',
+    url: 'https://rajutv.pages.dev/hls?url=http%3A%2F%2Fpremiumtvs.space%3A80%2Flive%2F1Aoen7elp5%2FIgMJ60tmAa%2F745149.ts',
+    quality: '720p',
+    protocol: 'HLS Proxy',
+    color: 'linear-gradient(135deg, rgba(0,200,100,0.15), rgba(0,100,50,0.05))',
+    language: 'English',
+    category: 'Sports',
+    description: 'World Cup Central Broadcast',
   },
 ];
 
@@ -183,24 +222,24 @@ const MAX_RETRIES = 3;
 // ────────────────────────────────────────────────────────────
 // DOM REFS
 // ────────────────────────────────────────────────────────────
-const video            = document.getElementById('mainVideo');
-const videoOverlay     = document.getElementById('videoOverlay');
-const loadingSpinner   = document.getElementById('loadingSpinner');
-const errorOverlay     = document.getElementById('errorOverlay');
-const customControls   = document.getElementById('customControls');
-const nowPlayingName   = document.getElementById('nowPlayingName');
-const playIcon         = document.getElementById('playIcon');
-const muteBtn          = document.getElementById('muteBtn');
-const volumeSlider     = document.getElementById('volumeSlider');
-const qualityBtn       = document.getElementById('qualityBtn');
-const qualityMenu      = document.getElementById('qualityMenu');
+const video = document.getElementById('mainVideo');
+const videoOverlay = document.getElementById('videoOverlay');
+const loadingSpinner = document.getElementById('loadingSpinner');
+const errorOverlay = document.getElementById('errorOverlay');
+const customControls = document.getElementById('customControls');
+const nowPlayingName = document.getElementById('nowPlayingName');
+const playIcon = document.getElementById('playIcon');
+const muteBtn = document.getElementById('muteBtn');
+const volumeSlider = document.getElementById('volumeSlider');
+const qualityBtn = document.getElementById('qualityBtn');
+const qualityMenu = document.getElementById('qualityMenu');
 const connectionStatus = document.getElementById('connectionStatus');
-const resolutionInfo   = document.getElementById('resolutionInfo');
-const bitrateInfo      = document.getElementById('bitrateInfo');
-const protocolInfo     = document.getElementById('protocolInfo');
-const channelsGrid     = document.getElementById('channelsGrid');
-const sidebarChannels  = document.getElementById('sidebarChannels');
-const errorMsg         = document.getElementById('errorMsg');
+const resolutionInfo = document.getElementById('resolutionInfo');
+const bitrateInfo = document.getElementById('bitrateInfo');
+const protocolInfo = document.getElementById('protocolInfo');
+const channelsGrid = document.getElementById('channelsGrid');
+const sidebarChannels = document.getElementById('sidebarChannels');
+const errorMsg = document.getElementById('errorMsg');
 
 // ────────────────────────────────────────────────────────────
 // INIT
@@ -211,6 +250,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderSchedule();
   initParticles();
   initHeaderScroll();
+  initTimer();
   initVideoEvents();
   setVolume(80);
   createToastContainer();
@@ -221,13 +261,15 @@ document.addEventListener('DOMContentLoaded', () => {
 // ────────────────────────────────────────────────────────────
 function renderChannelCards() {
   channelsGrid.innerHTML = '';
-  CHANNELS.forEach(ch => {
+  const limit = window.innerWidth <= 768 ? 5 : 16;
+
+  const createCard = (ch) => {
     const card = document.createElement('div');
     card.className = 'channel-card';
     card.id = `card-${ch.id}`;
     card.onclick = () => playChannel(ch);
-    const mediaHtml = ch.logo 
-      ? `<img src="${ch.logo}" alt="${ch.name}" class="card-logo-img">` 
+    const mediaHtml = ch.logo
+      ? `<img src="${ch.logo}" alt="${ch.name}" class="card-logo-img">`
       : `<div class="card-emoji">${ch.emoji}</div>`;
     card.innerHTML = `
       ${mediaHtml}
@@ -236,11 +278,37 @@ function renderChannelCards() {
         <span class="card-live-dot"></span>
         LIVE
       </div>
-      <div class="card-quality">${ch.quality} · ${ch.category}</div>
+      <div class="card-quality">${ch.quality} · ${ch.language} · ${ch.category}</div>
       <button class="card-watch-btn">▶ Watch Live</button>
     `;
-    channelsGrid.appendChild(card);
-  });
+    return card;
+  };
+
+  CHANNELS.slice(0, limit).forEach(ch => channelsGrid.appendChild(createCard(ch)));
+
+  if (CHANNELS.length > limit) {
+    const moreWrap = document.createElement('div');
+    moreWrap.id = 'channels-more';
+    moreWrap.style.display = 'none'; // Hidden by default
+    CHANNELS.slice(limit).forEach(ch => moreWrap.appendChild(createCard(ch)));
+    channelsGrid.appendChild(moreWrap);
+
+    const btnWrap = document.createElement('div');
+    btnWrap.style.gridColumn = '1 / -1';
+    btnWrap.style.display = 'flex';
+    btnWrap.style.justifyContent = 'center';
+    btnWrap.style.margin = '10px 0 20px';
+    
+    const btn = document.createElement('button');
+    btn.className = 'see-more-btn';
+    btn.textContent = 'See More Live Channels';
+    btn.onclick = () => {
+      moreWrap.style.display = 'contents'; // Integrates perfectly into parent grid
+      btnWrap.style.display = 'none';
+    };
+    btnWrap.appendChild(btn);
+    channelsGrid.appendChild(btnWrap);
+  }
 }
 
 function renderSidebarChannels() {
@@ -250,14 +318,14 @@ function renderSidebarChannels() {
     item.className = 'sidebar-item';
     item.id = `sidebar-${ch.id}`;
     item.onclick = () => playChannel(ch);
-    const mediaHtml = ch.logo 
-      ? `<img src="${ch.logo}" alt="${ch.name}" class="sidebar-logo-img">` 
+    const mediaHtml = ch.logo
+      ? `<img src="${ch.logo}" alt="${ch.name}" class="sidebar-logo-img">`
       : `<span class="sidebar-item-emoji">${ch.emoji}</span>`;
     item.innerHTML = `
       ${mediaHtml}
       <div>
         <div class="sidebar-item-name">${ch.name}</div>
-        <div class="sidebar-item-quality">${ch.quality}</div>
+        <div class="sidebar-item-quality">${ch.quality} · ${ch.language}</div>
       </div>
     `;
     sidebarChannels.appendChild(item);
@@ -267,39 +335,138 @@ function renderSidebarChannels() {
 // ────────────────────────────────────────────────────────────
 // RENDER SCHEDULE
 // ────────────────────────────────────────────────────────────
-function renderSchedule() {
-  const grid = document.getElementById('scheduleGrid');
-  if (!grid) return;
-  grid.innerHTML = '';
-  SCHEDULE.forEach(match => {
-    const card = document.createElement('div');
-    card.className = 'match-card';
-    const statusLabel = match.status === 'live' ? `<span class="match-status-dot"></span> LIVE` :
-                        match.status === 'finished' ? 'FULL TIME' : 'UPCOMING';
-    const scoreBlock = match.status === 'upcoming'
-      ? `<div class="match-vs">VS</div>`
-      : `<div class="match-score">${match.scoreH} – ${match.scoreA}</div>
-         <div class="match-time-detail">${match.time}</div>`;
-    card.innerHTML = `
-      <div class="match-status ${match.status}">${statusLabel}</div>
+function renderApiMatchCard(event) {
+  const competition = event.competitions?.[0];
+  if (!competition) return '';
+  const competitors = competition.competitors || [];
+  const home = competitors.find(c => c.homeAway === 'home') || competitors[0] || {};
+  const away = competitors.find(c => c.homeAway === 'away') || competitors[1] || {};
+
+  const state = event.status?.type?.state || 'pre';
+  const scoreH = home.score ?? '–';
+  const scoreA = away.score ?? '–';
+  const homeName = home.team?.shortDisplayName || home.team?.displayName || '?';
+  const awayName = away.team?.shortDisplayName || away.team?.displayName || '?';
+  const homeAbbr = home.team?.abbreviation || '';
+  const awayAbbr = away.team?.abbreviation || '';
+
+  const groupName = event.season?.type === 1 ? 'Group Stage' : 'Knockout Stage';
+  const dateStr = new Date(event.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+  let statusClass = 'upcoming';
+  let statusLabel = 'UPCOMING';
+  if (state === 'in') { statusClass = 'live'; statusLabel = '<span class="match-status-dot"></span> LIVE'; }
+  else if (state === 'post') { statusClass = 'finished'; statusLabel = 'FULL TIME'; }
+
+  const scoreBlock = state === 'pre'
+    ? `<div class="match-vs">VS</div><div class="card-timer" data-datetime="${event.date}"></div>`
+    : `<div class="match-score">${scoreH} – ${scoreA}</div><div class="match-time-detail">${state==='in'?(event.status?.displayClock||'LIVE'):'FT'}</div>`;
+
+  // Safely use getFlag from scoreboard.js if available
+  const flagHome = typeof getFlag !== 'undefined' ? getFlag(homeAbbr) : '⚽';
+  const flagAway = typeof getFlag !== 'undefined' ? getFlag(awayAbbr) : '⚽';
+
+  return `
+    <div class="match-card">
+      <div class="match-status ${statusClass}">${statusLabel}</div>
       <div class="match-teams">
         <div class="match-team">
-          <div class="team-flag">${match.home.split(' ')[0]}</div>
-          <div class="team-name">${match.home.split(' ').slice(1).join(' ')}</div>
+          <div class="team-flag">${flagHome}</div>
+          <div class="team-name">${homeName}</div>
         </div>
         <div class="match-score-wrap">${scoreBlock}</div>
         <div class="match-team">
-          <div class="team-flag">${match.away.split(' ')[0]}</div>
-          <div class="team-name">${match.away.split(' ').slice(1).join(' ')}</div>
+          <div class="team-flag">${flagAway}</div>
+          <div class="team-name">${awayName}</div>
         </div>
       </div>
       <div class="match-meta">
-        <span class="match-group">${match.group}</span>
-        <span class="match-datetime">${match.datetime}</span>
+        <span class="match-group">${competition?.notes?.[0]?.headline || groupName}</span>
+        <span class="match-datetime">${dateStr}</span>
       </div>
-    `;
-    grid.appendChild(card);
-  });
+    </div>
+  `;
+}
+
+async function renderSchedule() {
+  const grid = document.getElementById('scheduleGrid');
+  if (!grid) return;
+  
+  grid.innerHTML = '<div style="grid-column: 1 / -1; display:flex; justify-content:center; align-items:center; height:200px;"><div class="loader-ring"></div></div>';
+  
+  try {
+    const res = await fetch('/api/schedule?dates=20260611-20260719');
+    if (!res.ok) throw new Error('API Error');
+    const data = await res.json();
+    const events = data.events || [];
+    
+    // Sort events sequentially
+    events.sort((a, b) => new Date(a.date) - new Date(b.date));
+    
+    const past = events.filter(e => e.status?.type?.state === 'post');
+    const upcoming = events.filter(e => e.status?.type?.state !== 'post');
+    
+    let html = '';
+    
+    const pastLimit = window.innerWidth <= 768 ? 3 : 8;
+    if (past.length > 0) {
+      html += `<div style="grid-column: 1 / -1; color: var(--gold); font-size: 1.4rem; font-weight: 800; font-family: var(--font-display); letter-spacing: 2px; margin-top: 10px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 10px;">
+        <span style="opacity: 0.5;">⚽</span> PAST MATCHES
+      </div>`;
+      html += past.slice(0, pastLimit).map(renderApiMatchCard).join('');
+      if (past.length > pastLimit) {
+        html += `<div id="past-more" style="display:none; grid-column: 1 / -1;">
+          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; width: 100%;" class="nested-grid-mobile">
+            ${past.slice(pastLimit).map(renderApiMatchCard).join('')}
+          </div>
+        </div>`;
+        html += `<div id="past-btn-wrap" style="grid-column: 1 / -1; display:flex; justify-content:center; margin: 10px 0 20px;">
+          <button class="see-more-btn" onclick="document.getElementById('past-more').style.display='block'; this.parentElement.style.display='none';">See More Past Matches</button>
+        </div>`;
+      }
+    }
+    
+    const upLimit = window.innerWidth <= 768 ? 3 : 8;
+    if (upcoming.length > 0) {
+      html += `<div style="grid-column: 1 / -1; color: var(--gold); font-size: 1.4rem; font-weight: 800; font-family: var(--font-display); letter-spacing: 2px; margin-top: 40px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 10px;">
+        <span style="opacity: 0.5;">⏱️</span> UPCOMING MATCHES
+      </div>`;
+      html += upcoming.slice(0, upLimit).map(renderApiMatchCard).join('');
+      if (upcoming.length > upLimit) {
+        html += `<div id="upcoming-more" style="display:none; grid-column: 1 / -1;">
+          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; width: 100%;" class="nested-grid-mobile">
+            ${upcoming.slice(upLimit).map(renderApiMatchCard).join('')}
+          </div>
+        </div>`;
+        html += `<div id="upcoming-btn-wrap" style="grid-column: 1 / -1; display:flex; justify-content:center; margin: 10px 0 20px;">
+          <button class="see-more-btn" onclick="document.getElementById('upcoming-more').style.display='block'; this.parentElement.style.display='none';">See More Upcoming Matches</button>
+        </div>`;
+      }
+    }
+    
+    grid.innerHTML = html || '<p style="grid-column: 1 / -1; text-align: center; color: rgba(255,255,255,0.5);">No matches scheduled yet.</p>';
+
+    // Initialize Hero Timer with the next scheduled match
+    const nextPreMatch = upcoming.find(e => e.status?.type?.state === 'pre');
+    if (nextPreMatch && typeof initTimer === 'function') {
+      const comp = nextPreMatch.competitions?.[0] || {};
+      const competitors = comp.competitors || [];
+      const home = competitors.find(c => c.homeAway === 'home') || competitors[0] || {};
+      const away = competitors.find(c => c.homeAway === 'away') || competitors[1] || {};
+      const hName = home.team?.shortDisplayName || home.team?.displayName || '?';
+      const aName = away.team?.shortDisplayName || away.team?.displayName || '?';
+      const grp = comp.notes?.[0]?.headline || 'World Cup Match';
+      initTimer({
+        home: hName,
+        away: aName,
+        group: grp,
+        date: nextPreMatch.date
+      });
+    }
+  } catch (err) {
+    console.error('Schedule fetch error:', err);
+    grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: var(--red); padding: 40px;">Failed to load tournament calendar from API.</div>';
+  }
 }
 
 // ────────────────────────────────────────────────────────────
@@ -332,6 +499,7 @@ function playChannel(channel) {
 
   nowPlayingName.textContent = channel.name;
   protocolInfo.textContent = channel.protocol;
+  document.getElementById('languageInfo').textContent = channel.language || 'English';
 
   hideAllOverlays();
   showLoading(true);
@@ -349,8 +517,8 @@ function playChannel(channel) {
   let url = channel.url;
 
   // Determine stream type
-  const isHLS = url.includes('.m3u8') || url.includes('/tracks-v');
-  const isTS  = url.endsWith('.ts');
+  const isHLS = url.includes('.m3u8') || url.includes('/tracks-v') || url.includes('/hls?');
+  const isTS = url.endsWith('.ts') && !isHLS;
 
   // If it is a raw TS file, we route it through our proxy to avoid CORS
   if (isTS) {
@@ -381,12 +549,13 @@ function loadWithMpegts(url, channel) {
     mpegtsInstance = mpegts.createPlayer({
       type: 'ts',
       isLive: true,
-      url: url
+      url: url,
+      hasAudio: false // Disable audio to test if an unsupported audio codec is crashing the player
     });
-    
+
     mpegtsInstance.attachMediaElement(video);
     mpegtsInstance.load();
-    
+
     mpegtsInstance.on(mpegts.Events.ERROR, (errorType, errorDetail, errorInfo) => {
       console.error('mpegts error:', errorType, errorDetail, errorInfo);
       handleMpegtsError(errorType, channel);
@@ -428,9 +597,9 @@ function handleMpegtsError(errorType, channel) {
 function isHEVCCodec(codecStr) {
   if (!codecStr) return false;
   return codecStr.toLowerCase().includes('hvc1') ||
-         codecStr.toLowerCase().includes('hev1') ||
-         codecStr.toLowerCase().includes('dvh1') ||
-         codecStr.toLowerCase().includes('dvhe');
+    codecStr.toLowerCase().includes('hev1') ||
+    codecStr.toLowerCase().includes('dvh1') ||
+    codecStr.toLowerCase().includes('dvhe');
 }
 
 // Find the best H.264 level index (-1 if none found)
@@ -483,7 +652,7 @@ function loadWithHLS(url, channel) {
     showLoading(false);
     showControls(true);
     updateQualityLevels(levels);
-    video.play().catch(() => {});
+    video.play().catch(() => { });
     connectionStatus.textContent = allHEVC ? 'HEVC ⚠' : 'Connected ✓';
     resolutionInfo.textContent = levels.length ? getMaxResolution(levels) : channel.quality;
     bitrateInfo.textContent = levels.length ? formatBitrate(levels[0].bitrate) : '—';
@@ -632,7 +801,7 @@ function setQuality(q) {
 
   if (!hlsInstance) return;
 
-  switch(q) {
+  switch (q) {
     case 'auto':
       hlsInstance.currentLevel = -1;
       qualityBtn.textContent = '⚙ Auto';
@@ -769,7 +938,7 @@ async function togglePiP() {
 
   // ── Exit existing PiP ──
   if (document.pictureInPictureElement) {
-    await document.exitPictureInPicture().catch(() => {});
+    await document.exitPictureInPicture().catch(() => { });
     showToast('🔲 Exited Picture-in-Picture', 'info');
     return;
   }
@@ -1139,3 +1308,73 @@ socket.on('viewer_update', (data) => {
     }
   }
 });
+
+function initTimer(nextMatch) {
+  const timerEl = document.getElementById('nextMatchTimer');
+  let matchDate = null;
+
+  if (nextMatch && timerEl) {
+    timerEl.style.display = 'flex';
+    document.getElementById('timerMatchName').textContent = `${nextMatch.home} vs ${nextMatch.away} · ${nextMatch.group}`;
+    matchDate = new Date(nextMatch.date);
+    if (isNaN(matchDate.getTime())) {
+      matchDate = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
+    }
+  } else if (timerEl) {
+    timerEl.style.display = 'none';
+  }
+
+  function updateTimer() {
+    const now = new Date();
+
+    // 1. Update Hero Timer
+    if (matchDate && timerEl && timerEl.style.display !== 'none') {
+      const diff = matchDate - now;
+      if (diff <= 0) {
+        document.getElementById('t-days').textContent = '00';
+        document.getElementById('t-hours').textContent = '00';
+        document.getElementById('t-mins').textContent = '00';
+        document.getElementById('t-secs').textContent = '00';
+      } else {
+        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const m = Math.floor((diff / 1000 / 60) % 60);
+        const s = Math.floor((diff / 1000) % 60);
+
+        document.getElementById('t-days').textContent = d.toString().padStart(2, '0');
+        document.getElementById('t-hours').textContent = h.toString().padStart(2, '0');
+        document.getElementById('t-mins').textContent = m.toString().padStart(2, '0');
+        document.getElementById('t-secs').textContent = s.toString().padStart(2, '0');
+      }
+    }
+
+    // 2. Update all card timers
+    document.querySelectorAll('.card-timer').forEach(el => {
+      const dt = el.getAttribute('data-datetime');
+      if (dt) {
+        let mDate = new Date(dt);
+        if (isNaN(mDate.getTime())) mDate = new Date(new Date().getTime() + 24*60*60*1000);
+        
+        const diff2 = mDate - now;
+        if (diff2 <= 0) {
+          el.textContent = 'LIVE SOON';
+        } else {
+          const dd = Math.floor(diff2 / (1000 * 60 * 60 * 24));
+          const hh = Math.floor((diff2 / (1000 * 60 * 60)) % 24);
+          const mm = Math.floor((diff2 / 1000 / 60) % 60);
+          const ss = Math.floor((diff2 / 1000) % 60);
+          
+          if (dd > 0) {
+            el.textContent = `in ${dd}d ${hh}h ${mm}m`;
+          } else {
+            el.textContent = `in ${hh}h ${mm}m ${ss}s`;
+          }
+        }
+      }
+    });
+  }
+
+  updateTimer();
+  if (window.appTimerInterval) clearInterval(window.appTimerInterval);
+  window.appTimerInterval = setInterval(updateTimer, 1000);
+}

@@ -12,26 +12,29 @@ let   sbCurrentTab    = 'live';
 let   sbResultsLoaded = false;
 let   sbStandingsLoaded = false;
 
-// Team flag map (ISO code → emoji)
-const FLAG = {
-  'ARG':'🇦🇷','BRA':'🇧🇷','FRA':'🇫🇷','GER':'🇩🇪','ENG':'🏴󠁧󠁢󠁥󠁮󠁧󠁿',
-  'POR':'🇵🇹','ESP':'🇪🇸','ITA':'🇮🇹','NED':'🇳🇱','BEL':'🇧🇪',
-  'URU':'🇺🇾','CRO':'🇭🇷','DEN':'🇩🇰','SUI':'🇨🇭','MEX':'🇲🇽',
-  'USA':'🇺🇸','CAN':'🇨🇦','MAR':'🇲🇦','JAP':'🇯🇵','KOR':'🇰🇷',
-  'SEN':'🇸🇳','GHA':'🇬🇭','CMR':'🇨🇲','NGA':'🇳🇬','ECU':'🇪🇨',
-  'COL':'🇨🇴','CHI':'🇨🇱','PER':'🇵🇪','BOL':'🇧🇴','PAR':'🇵🇾',
-  'AUS':'🇦🇺','NZL':'🇳🇿','JPN':'🇯🇵','IRN':'🇮🇷','SAU':'🇸🇦',
-  'QAT':'🇶🇦','KSA':'🇸🇦','TUN':'🇹🇳','ALG':'🇩🇿','EGY':'🇪🇬',
-  'POL':'🇵🇱','SRB':'🇷🇸','CZE':'🇨🇿','SVK':'🇸🇰','HUN':'🇭🇺',
-  'ROM':'🇷🇴','UKR':'🇺🇦','RUS':'🇷🇺','TUR':'🇹🇷','GRE':'🇬🇷',
-  'SWE':'🇸🇪','NOR':'🇳🇴','WAL':'🏴󠁧󠁢󠁷󠁬󠁳󠁿','SCO':'🏴󠁧󠁢󠁳󠁣󠁴󠁿','IRL':'🇮🇪',
-  'MEX':'🇲🇽','CRC':'🇨🇷','HON':'🇭🇳','PAN':'🇵🇦','JAM':'🇯🇲',
-  'default':'⚽'
+// Team flag map (ESPN 3-letter code → ISO 2-letter code for flagcdn)
+const FLAG_ISO = {
+  'ARG':'ar','BRA':'br','FRA':'fr','GER':'de','ENG':'gb-eng',
+  'POR':'pt','ESP':'es','ITA':'it','NED':'nl','BEL':'be',
+  'URU':'uy','CRO':'hr','DEN':'dk','SUI':'ch','MEX':'mx',
+  'USA':'us','CAN':'ca','MAR':'ma','JAP':'jp','KOR':'kr',
+  'SEN':'sn','GHA':'gh','CMR':'cm','NGA':'ng','ECU':'ec',
+  'COL':'co','CHI':'cl','PER':'pe','BOL':'bo','PAR':'py',
+  'AUS':'au','NZL':'nz','JPN':'jp','IRN':'ir','SAU':'sa',
+  'QAT':'qa','KSA':'sa','TUN':'tn','ALG':'dz','EGY':'eg',
+  'POL':'pl','SRB':'rs','CZE':'cz','SVK':'sk','HUN':'hu',
+  'ROM':'ro','UKR':'ua','RUS':'ru','TUR':'tr','GRE':'gr',
+  'SWE':'se','NOR':'no','WAL':'gb-wls','SCO':'gb-sct','IRL':'ie',
+  'CRC':'cr','HON':'hn','PAN':'pa','JAM':'jm','RSA':'za',
+  'BIH':'ba','HAI':'ht','CUW':'cw','CIV':'ci','CPV':'cv',
+  'COD':'cd','UZB':'uz','AUT':'at','JOR':'jo', 'IRQ':'iq'
 };
 
 function getFlag(abbr) {
   if (!abbr) return '⚽';
-  return FLAG[abbr.toUpperCase()] || FLAG['default'];
+  const iso = FLAG_ISO[abbr.toUpperCase()];
+  if (!iso) return '⚽';
+  return `<img src="https://flagcdn.com/w40/${iso}.png" class="team-flag-img" alt="${abbr}">`;
 }
 
 // ── Helpers ────────────────────────────────────────────────────
@@ -170,6 +173,20 @@ async function sbLoadStandings() {
   }
 }
 
+// ── HELPERS ────────────────────────────────────────────────────
+function getTimerText(dateString) {
+  if (!dateString) return '';
+  const matchDate = new Date(dateString);
+  const diff = matchDate - new Date();
+  if (diff <= 0) return 'LIVE SOON';
+  const dd = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hh = Math.floor((diff / (1000 * 60 * 60)) % 24);
+  const mm = Math.floor((diff / 1000 / 60) % 60);
+  const ss = Math.floor((diff / 1000) % 60);
+  if (dd > 0) return `in ${dd}d ${hh}h ${mm}m`;
+  return `in ${hh}h ${mm}m ${ss}s`;
+}
+
 // ── RENDER MATCH CARD ──────────────────────────────────────────
 function renderMatchCard(event) {
   const competition = event.competitions?.[0];
@@ -217,10 +234,16 @@ function renderMatchCard(event) {
   const homeWin = state === 'post' && parseInt(homeScore) > parseInt(awayScore);
   const awayWin = state === 'post' && parseInt(awayScore) > parseInt(homeScore);
 
+  let timerCorner = '';
+  if (state === 'pre' && event.date) {
+    timerCorner = `<div class="card-timer" data-datetime="${event.date}" style="margin: 0; display: inline-block;">${getTimerText(event.date)}</div>`;
+  }
+
   return `
   <div class="match-card2 ${statusClass}">
     <div class="mc-header">
       ${statusHtml}
+      ${timerCorner}
       ${note ? `<span class="mc-note">${note}</span>` : ''}
     </div>
     <div class="mc-body">
