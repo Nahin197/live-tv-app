@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FreeTv · FIFA World Cup 2026 – Live Streaming</title>
+  <meta name="description" content="Watch FIFA World Cup 2026 live streams free. PTV Sports, Bein Sports, T-Sports, Win Sports and more – HD quality, no subscription needed." />
+  <meta property="og:title" content="FreeTv · FIFA World Cup 2026 Live" />
+  <meta property="og:description" content="Watch every World Cup match live for free in HD quality." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ====== LIVE SCORE TICKER ====== -->
+  <div class="ticker-bar" id="tickerBar">
+    <div class="ticker-label">⚽ LIVE</div>
+    <div class="ticker-track">
+      <div class="ticker-content" id="tickerContent">
+        <span>🇧🇷 Brazil 2–1 Argentina 🇦🇷</span>
+        <span>🇫🇷 France 0–0 Germany 🇩🇪 &nbsp;·&nbsp; 34'</span>
+        <span>🇵🇹 Portugal 3–0 Morocco 🇲🇦 &nbsp;·&nbsp; FT</span>
+        <span>🇪🇸 Spain 1–2 England 🏴󠁧󠁢󠁥󠁮󠁧󠁿 &nbsp;·&nbsp; 67'</span>
+        <span>🇺🇸 USA 1–1 Mexico 🇲🇽 &nbsp;·&nbsp; HT</span>
+        <span>🇯🇵 Japan 2–0 South Korea 🇰🇷 &nbsp;·&nbsp; FT</span>
+        <span>🇧🇷 Brazil 2–1 Argentina 🇦🇷</span>
+        <span>🇫🇷 France 0–0 Germany 🇩🇪 &nbsp;·&nbsp; 34'</span>
+        <span>🇵🇹 Portugal 3–0 Morocco 🇲🇦 &nbsp;·&nbsp; FT</span>
+        <span>🇪🇸 Spain 1–2 England 🏴󠁧󠁢󠁥󠁮󠁧󠁿 &nbsp;·&nbsp; 67'</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== HEADER ====== -->
+  <header class="header" id="main-header">
+    <div class="header-inner">
+      <div class="logo-wrap">
+        <div class="logo-icon-wc">
+          <svg viewBox="0 0 44 44" fill="none" width="40" height="40">
+            <circle cx="22" cy="22" r="21" stroke="url(#wc-grad)" stroke-width="2"/>
+            <!-- soccer ball pattern -->
+            <circle cx="22" cy="22" r="10" fill="url(#wc-grad)" opacity="0.9"/>
+            <polygon points="22,12 25,19 32,19 26.5,23.5 28.5,30.5 22,26 15.5,30.5 17.5,23.5 12,19 19,19" fill="rgba(6,11,24,0.7)"/>
+            <defs>
+              <linearGradient id="wc-grad" x1="0" y1="0" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#F0B518"/>
+                <stop offset="1" stop-color="#C9941A"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div class="logo-text-wrap">
+          <span class="logo-text-main">Free<span class="gold">Tv</span></span>
+          <span class="logo-text-sub">WORLD CUP 2026</span>
+        </div>
+      </div>
+
+      <nav class="nav-links" id="mainNav">
+        <a href="#channels-section" class="nav-link">📡 Live Channels</a>
+        <a href="#player-section" class="nav-link">🎬 Watch</a>
+        <a href="#schedule-section" class="nav-link">📅 Schedule</a>
+      </nav>
+
+      <div class="header-right">
+        <div class="live-pill">
+          <span class="live-dot-anim"></span>
+          LIVE NOW
+        </div>
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ====== HERO ====== -->
+  <section class="hero" id="hero">
+    <div class="hero-bg-img"></div>
+    <div class="hero-overlay-grad"></div>
+    <div class="hero-grid-lines"></div>
+    <div class="hero-particles" id="particles"></div>
+
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <span class="eyebrow-flag">🏆</span>
+        FIFA WORLD CUP 2026 · LIVE STREAMING
+      </div>
+      <h1 class="hero-title">
+        <span class="hero-title-line1">WATCH THE</span>
+        <span class="hero-title-line2">WORLD CUP</span>
+        <span class="hero-title-line3">LIVE &amp; FREE</span>
+      </h1>
+      <p class="hero-subtitle">
+        Stream every match in HD — from Group Stages to the Grand Final.<br/>
+        Multiple channels, zero subscription.
+      </p>
+      <div class="hero-cta">
+        <button class="btn-gold" onclick="scrollToChannels()">
+          <span class="btn-icon">▶</span> Watch Live Now
+        </button>
+        <button class="btn-outline" onclick="scrollToPlayer()">
+          🔴 Open Player
+        </button>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-chip">
+          <span class="chip-num">6+</span>
+          <span class="chip-label">Live Channels</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-chip">
+          <span class="chip-num">HD</span>
+          <span class="chip-label">Quality</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-chip">
+          <span class="chip-num">Free</span>
+          <span class="chip-label">No Sign-up</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-chip">
+          <span class="chip-num">48</span>
+          <span class="chip-label">Matches</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-ball-wrap">
+      <img src="wc_ball.png" alt="World Cup Ball" class="hero-ball" />
+    </div>
+
+    <div class="scroll-down" onclick="scrollToChannels()">
+      <div class="scroll-chevron"></div>
+    </div>
+  </section>
+
+  <!-- ====== CHANNELS ====== -->
+  <section class="section channels-section" id="channels-section">
+    <div class="section-header">
+      <div class="section-eyebrow">📡 LIVE NOW</div>
+      <h2 class="section-title">Live <span class="gold">Channels</span></h2>
+      <p class="section-sub">Tap any channel to start streaming instantly</p>
+    </div>
+    <div class="channels-grid" id="channelsGrid">
+      <!-- Injected by JS -->
+    </div>
+  </section>
+
+  <!-- ====== PLAYER ====== -->
+  <section class="section player-section" id="player-section">
+    <div class="section-header">
+      <div class="section-eyebrow">🎬 LIVE PLAYER</div>
+      <h2 class="section-title">Live <span class="gold">Stream</span></h2>
+    </div>
+
+    <div class="player-layout">
+      <!-- Main Player -->
+      <div class="player-main">
+        <div class="player-topbar">
+          <div class="now-playing-info">
+            <div class="now-dot"></div>
+            <span class="now-label">Now Playing:</span>
+            <span class="now-name" id="nowPlayingName">Select a channel</span>
+          </div>
+          <div class="topbar-actions">
+            <button class="tbar-btn" title="Picture in Picture" onclick="togglePiP()">⛶ PiP</button>
+            <button class="tbar-btn" title="Fullscreen" onclick="toggleFullscreen()">⤢</button>
+          </div>
+        </div>
+
+        <div class="video-container" id="videoContainer">
+          <video id="mainVideo" class="main-video" playsinline></video>
+
+          <!-- Idle Overlay -->
+          <div class="video-overlay" id="videoOverlay">
+            <div class="overlay-icon">⚽</div>
+            <p class="overlay-title">Select a Channel</p>
+            <p class="overlay-sub">Choose any channel below to start watching</p>
+            <button class="btn-gold sm" onclick="scrollToChannels()">Browse Channels</button>
+          </div>
+
+          <!-- Loading -->
+          <div class="loading-overlay" id="loadingSpinner" style="display:none">
+            <div class="loader-ring"></div>
+            <p class="loader-text">Loading stream…</p>
+          </div>
+
+          <!-- Error -->
+          <div class="error-overlay" id="errorOverlay" style="display:none">
+            <div class="error-ico">⚠️</div>
+            <p class="error-title">Stream Unavailable</p>
+            <p class="error-msg" id="errorMsg">This stream is currently offline.</p>
+            <button class="btn-retry" onclick="retryStream()">↻ Retry</button>
+          </div>
+
+          <!-- Custom Controls -->
+          <div class="player-controls" id="customControls" style="display:none">
+            <div class="progress-wrap">
+              <div class="progress-track">
+                <div class="progress-fill" id="progressBar"></div>
+              </div>
+              <span class="live-badge-ctrl">● LIVE</span>
+            </div>
+            <div class="ctrl-row">
+              <div class="ctrl-left">
+                <button class="ctrl-btn play-btn" id="playPauseBtn" onclick="togglePlayPause()" title="Play/Pause">
+                  <span id="playIcon">⏸</span>
+                </button>
+                <button class="ctrl-btn" id="muteBtn" onclick="toggleMute()" title="Mute">🔊</button>
+                <div class="vol-wrap">
+                  <input type="range" id="volumeSlider" min="0" max="100" value="80" class="vol-slider" oninput="setVolume(this.value)" />
+                </div>
+                <span class="stream-time" id="streamTime">LIVE</span>
+              </div>
+              <div class="ctrl-right">
+                <div class="quality-wrap">
+                  <button class="ctrl-btn quality-btn" id="qualityBtn" onclick="toggleQualityMenu()" title="Quality">⚙ Auto</button>
+                  <div class="quality-menu" id="qualityMenu">
+                    <div class="quality-menu-header">Stream Quality</div>
+                    <button class="quality-option active" data-quality="auto" onclick="setQuality('auto')">🔵 Auto</button>
+                    <button class="quality-option" data-quality="1080" onclick="setQuality('1080')">🟢 1080p HD</button>
+                    <button class="quality-option" data-quality="720" onclick="setQuality('720')">🟡 720p HD</button>
+                    <button class="quality-option" data-quality="480" onclick="setQuality('480')">🟠 480p SD</button>
+                    <button class="quality-option" data-quality="360" onclick="setQuality('360')">🔴 360p</button>
+                  </div>
+                </div>
+                <button class="ctrl-btn" onclick="togglePiP()" title="Picture-in-Picture">⛶</button>
+                <button class="ctrl-btn" onclick="toggleFullscreen()" id="fsBtn" title="Fullscreen">⤢</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stream Stats Bar -->
+        <div class="stats-bar">
+          <div class="stat-pill">
+            <span class="stat-pill-icon">📶</span>
+            <div>
+              <div class="stat-pill-label">Connection</div>
+              <div class="stat-pill-val" id="connectionStatus">—</div>
+            </div>
+          </div>
+          <div class="stat-pill">
+            <span class="stat-pill-icon">📺</span>
+            <div>
+              <div class="stat-pill-label">Resolution</div>
+              <div class="stat-pill-val" id="resolutionInfo">—</div>
+            </div>
+          </div>
+          <div class="stat-pill">
+            <span class="stat-pill-icon">⚡</span>
+            <div>
+              <div class="stat-pill-label">Bitrate</div>
+              <div class="stat-pill-val" id="bitrateInfo">—</div>
+            </div>
+          </div>
+          <div class="stat-pill">
+            <span class="stat-pill-icon">🌐</span>
+            <div>
+              <div class="stat-pill-label">Protocol</div>
+              <div class="stat-pill-val" id="protocolInfo">—</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="player-sidebar">
+        <div class="sidebar-head">All Channels</div>
+        <div class="sidebar-list" id="sidebarChannels"></div>
+        <div class="sidebar-shortcuts">
+          <div class="shortcut-title">⌨ Keyboard Shortcuts</div>
+          <div class="shortcut-row"><span class="key">Space</span> Play / Pause</div>
+          <div class="shortcut-row"><span class="key">F</span> Fullscreen</div>
+          <div class="shortcut-row"><span class="key">M</span> Mute</div>
+          <div class="shortcut-row"><span class="key">P</span> Picture-in-Picture</div>
+          <div class="shortcut-row"><span class="key">↑ ↓</span> Volume</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== LIVE SCOREBOARD ====== -->
+  <section class="scoreboard-section" id="scoreboard-section">
+    <div class="sb-inner">
+      <div class="section-header" style="margin-bottom:36px">
+        <div class="section-eyebrow">🏆 FIFA WORLD CUP 2026</div>
+        <h2 class="section-title">Live <span class="gold">Scoreboard</span></h2>
+        <p class="section-sub" id="sbLastUpdated">Fetching live data…</p>
+      </div>
+
+      <!-- Tabs -->
+      <div class="sb-tabs">
+        <button class="sb-tab active" id="tab-live" onclick="sbSwitchTab('live')">⚡ Live &amp; Today</button>
+        <button class="sb-tab" id="tab-results" onclick="sbSwitchTab('results')">📋 All Results</button>
+        <button class="sb-tab" id="tab-standings" onclick="sbSwitchTab('standings')">📊 Group Standings</button>
+      </div>
+
+      <!-- Live / Today Matches Panel -->
+      <div class="sb-panel" id="panel-live">
+        <div class="sb-refresh-bar">
+          <span id="liveCount" class="sb-live-count">Loading…</span>
+          <button class="sb-refresh-btn" onclick="sbLoadLive()">↻ Refresh</button>
+          <span class="sb-auto-note">Auto-refreshes every 5s</span>
+        </div>
+        <div class="sb-matches-grid" id="liveMatchesGrid">
+          <div class="sb-skeleton">
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- All Results Panel -->
+      <div class="sb-panel" id="panel-results" style="display:none">
+        <div class="sb-refresh-bar">
+          <span class="sb-live-count">All Matches – FIFA World Cup 2026</span>
+          <button class="sb-refresh-btn" onclick="sbLoadResults()">↻ Refresh</button>
+        </div>
+        <div id="allResultsContainer">
+          <div class="sb-skeleton">
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Standings Panel -->
+      <div class="sb-panel" id="panel-standings" style="display:none">
+        <div class="sb-refresh-bar">
+          <span class="sb-live-count">Group Stage Standings</span>
+          <button class="sb-refresh-btn" onclick="sbLoadStandings()">↻ Refresh</button>
+        </div>
+        <div id="standingsContainer">
+          <div class="sb-skeleton">
+            <div class="skeleton-card" style="height:200px"></div>
+            <div class="skeleton-card" style="height:200px"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== FOOTER ====== -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-logo-wrap">
+        <div class="logo-icon-wc sm">
+          <svg viewBox="0 0 44 44" fill="none" width="30" height="30">
+            <circle cx="22" cy="22" r="21" stroke="url(#fg)" stroke-width="2"/>
+            <circle cx="22" cy="22" r="10" fill="url(#fg)" opacity="0.9"/>
+            <polygon points="22,12 25,19 32,19 26.5,23.5 28.5,30.5 22,26 15.5,30.5 17.5,23.5 12,19 19,19" fill="rgba(6,11,24,0.7)"/>
+            <defs>
+              <linearGradient id="fg" x1="0" y1="0" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#F0B518"/><stop offset="1" stop-color="#C9941A"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div>
+          <div class="footer-brand">Free<span class="gold">Tv</span></div>
+          <div class="footer-tagline">Your World Cup Companion</div>
+        </div>
+      </div>
+      <p class="footer-note">Free live sports streaming. For entertainment purposes only. All streams are third-party public sources. We do not host any content.</p>
+      <div class="footer-bottom">
+        <span>© 2026 FreeTv</span>
+        <span class="footer-dot">·</span>
+        <span>FIFA World Cup 2026</span>
+        <span class="footer-dot">·</span>
+        <span>Built for fans ⚽</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Video Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.7/dist/hls.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mpegts.js@1.7.3/dist/mpegts.min.js"></script>
+  <script src="app.js"></script>
+  <script src="scoreboard.js"></script>
+</body>
+</html>
+

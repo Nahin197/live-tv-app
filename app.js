@@ -1,0 +1,1112 @@
+/* ============================================================
+   FREE TV — FIFA WORLD CUP 2026 EDITION
+   app.js — Live streaming with HLS.js + quality control + PiP
+   ============================================================ */
+
+// ────────────────────────────────────────────────────────────
+// MATCH SCHEDULE DATA
+// ────────────────────────────────────────────────────────────
+const SCHEDULE = [
+  { home:'🇧🇷 Brazil',    away:'🇦🇷 Argentina',  scoreH:2,  scoreA:1,  status:'live',     time:"73'",  group:'Group C', datetime:'Jun 16, 19:00' },
+  { home:'🇫🇷 France',    away:'🇩🇪 Germany',    scoreH:0,  scoreA:0,  status:'live',     time:"34'",  group:'Group F', datetime:'Jun 16, 21:00' },
+  { home:'🇵🇹 Portugal',  away:'🇲🇦 Morocco',    scoreH:3,  scoreA:0,  status:'finished', time:'FT',   group:'Group H', datetime:'Jun 16, 15:00' },
+  { home:'🇪🇸 Spain',     away:'🏴󠁧󠁢󠁥󠁮󠁧󠁿 England',   scoreH:1,  scoreA:2,  status:'live',     time:"67'",  group:'Group D', datetime:'Jun 16, 18:00' },
+  { home:'🇺🇸 USA',       away:'🇲🇽 Mexico',     scoreH:1,  scoreA:1,  status:'live',     time:'HT',   group:'Group A', datetime:'Jun 16, 20:00' },
+  { home:'🇯🇵 Japan',     away:'🇰🇷 South Korea',scoreH:2,  scoreA:0,  status:'finished', time:'FT',   group:'Group E', datetime:'Jun 16, 13:00' },
+  { home:'🇳🇱 Netherlands',away:'🇸🇦 Saudi Arabia',scoreH:null,scoreA:null,status:'upcoming',time:'',  group:'Group B', datetime:'Jun 17, 15:00' },
+  { home:'🇨🇷 Croatia',   away:'🇧🇪 Belgium',    scoreH:null,scoreA:null,status:'upcoming',time:'',   group:'Group G', datetime:'Jun 17, 18:00' },
+  { home:'🇨🇦 Canada',    away:'🇷🇸 Serbia',     scoreH:null,scoreA:null,status:'upcoming',time:'',   group:'Group A', datetime:'Jun 17, 21:00' },
+];
+
+// ────────────────────────────────────────────────────────────
+// CHANNEL DATA
+// ────────────────────────────────────────────────────────────
+const CHANNELS = [
+  {
+    id: 'caze-tv',
+    name: 'Caze TV',
+    emoji: '📺',
+    logo: 'https://images.seeklogo.com/logo-png/61/2/cazetv-logo-png_seeklogo-619708.png',
+    url: 'https://dfr80qz435crc.cloudfront.net/MNOP/Amagi/Caze/Caze_TV_BR/1080p-vtt/index.m3u8',
+    quality: '1080p HLS',
+    protocol: 'HLS',
+    color: 'linear-gradient(135deg, rgba(79,172,254,0.15), rgba(0,242,254,0.05))',
+    category: 'Sports',
+    description: 'Brazilian Sports',
+  },
+  {
+    id: 'd-sports',
+    name: 'D Sports',
+    emoji: '🎯',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/5/5a/DSports.png',
+    url: 'https://1nyaler.streamhostingcdn.top/stream/106/index.m3u8',
+    quality: 'HD HLS',
+    protocol: 'HLS',
+    color: 'linear-gradient(135deg, rgba(255,107,53,0.15), rgba(255,60,172,0.05))',
+    category: 'Sports',
+    description: 'D Sports Live',
+  },
+  {
+    id: 'tyc-sports',
+    name: 'TyC Sports',
+    emoji: '🇦🇷',
+    url: 'https://1nyaler.streamhostingcdn.top/stream/84/index.m3u8',
+    quality: 'HD HLS',
+    protocol: 'HLS',
+    color: 'linear-gradient(135deg, rgba(116,172,223,0.15), rgba(255,255,255,0.05))',
+    category: 'Sports',
+    description: 'TyC Sports Live',
+  },
+  {
+    id: 'tsn-sports',
+    name: 'TSN Sports',
+    emoji: '🍁',
+    logo: 'https://iconlogovector.com/uploads/images/2025/03/lg-67d80052de144-TSN.webp',
+    url: 'https://d1kji91sh94cnz.cloudfront.net/newi/1/fronts.woff2?2d4710',
+    quality: 'HD HLS',
+    protocol: 'HLS',
+    color: 'linear-gradient(135deg, rgba(230,0,0,0.15), rgba(255,100,100,0.05))',
+    category: 'Sports',
+    description: 'TSN Sports Live',
+  },
+
+  {
+    id: 'bein-sports',
+    name: 'Bein Sports',
+    emoji: '⚽',
+    logo: 'https://logowik.com/content/uploads/images/bein-sports-png2285.logowik.com.webp',
+    url: 'https://1nyaler.streamhostingcdn.top/stream/23/index.m3u8',
+    quality: 'HD HLS',
+    protocol: 'HLS',
+    color: 'linear-gradient(135deg, rgba(0,200,255,0.12), rgba(79,172,254,0.05))',
+    category: 'Football',
+    description: 'Bein Sports Live',
+  },
+  {
+    id: 'win-sports',
+    name: 'Win Sports',
+    emoji: '🏅',
+    logo: 'https://logowik.com/content/uploads/images/win-sports6956.logowik.com.webp',
+    url: 'https://1nyaler.streamhostingcdn.top/stream/32/index.m3u8',
+    quality: 'HD HLS',
+    protocol: 'HLS',
+    color: 'linear-gradient(135deg, rgba(138,43,226,0.12), rgba(255,107,53,0.05))',
+    category: 'Sports',
+    description: 'Win Sports Live',
+  },
+  {
+    id: 'bein-xtra',
+    name: 'BeIN Xtra',
+    emoji: '🔴',
+    logo: 'https://assets.goal.com/images/v3/blt0da91b1c9b8e431d/bein%20sports%20xtra%20logo.jpg',
+    url: 'https://bein-xtra-bein.amagi.tv/playlistR480p.m3u8',
+    quality: '480p HLS',
+    protocol: 'HLS',
+    color: 'linear-gradient(135deg, rgba(220,38,38,0.15), rgba(239,68,68,0.05))',
+    category: 'Sports',
+    description: 'BeIN Xtra Live',
+  },
+  {
+    id: 'thiendinh-tv',
+    name: 'Thiendinh TV China',
+    emoji: '🇨🇳',
+    url: 'https://tfwr3gr3uomttgr31hp3tfa3dqmmeqfsg17uff3hsnhuqcp1ghmucpf5gk.100ycdn.com/hqlive.yarncdn.live/live/hqtv_blv_phanma/playlist.m3u8?wsSession=a5e3e6436986f485e3e3662e-178154316934606&wsIPSercert=309a27e401f36b37ea68d1183414e973&wsBindIP=2&wsserid=1168201446952453455',
+    quality: 'HD HLS',
+    protocol: 'HLS',
+    color: 'linear-gradient(135deg, rgba(220,38,38,0.15), rgba(239,68,68,0.05))',
+    category: 'Sports',
+    description: 'Thiendinh TV China Live',
+  },
+
+  {
+    id: 'cctv-china',
+    name: 'CCTV China',
+    emoji: '🇨🇳',
+    logo: 'https://variety.com/wp-content/uploads/2020/12/CCTV-logo.jpg?w=1000&h=575&crop=1',
+    url: 'https://live12.szyac.com/live/85042987.m3u8',
+    quality: 'HD HLS',
+    protocol: 'HLS',
+    color: 'linear-gradient(135deg, rgba(220,38,38,0.15), rgba(239,68,68,0.05))',
+    category: 'Sports',
+    description: 'CCTV China Live',
+  },
+  {
+    id: 'somoy-tv',
+    name: 'Somoy TV',
+    emoji: '📰',
+    logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZzSj1cK5jkXileb7UvL4qNnAcgfCVLqzLtg&s',
+    url: 'https://live.thebosstv.com:30443/dwlive/Somoy-TV/chunks.m3u8',
+    quality: 'HD HLS',
+    protocol: 'HLS',
+    color: 'linear-gradient(135deg, rgba(255,87,34,0.15), rgba(255,193,7,0.05))',
+    category: 'News',
+    description: 'Somoy TV Live',
+  },
+  {
+    id: 'colatv99',
+    name: 'ColaTV99.live',
+    emoji: '🥤',
+    logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDEQTi-4cJT_kfdTZ6pYsB2a2NB5iyPEO3aA&s',
+    url: 'https://live05.msdht.app/live/24561735.m3u8',
+    quality: 'HD HLS',
+    protocol: 'HLS',
+    color: 'linear-gradient(135deg, rgba(244,67,54,0.15), rgba(233,30,99,0.05))',
+    category: 'Sports',
+    description: 'ColaTV 99 Live Stream',
+  },
+  {
+    id: 'z-bangla',
+    name: 'Z Bangla',
+    emoji: '📺',
+    logo: 'https://yt3.googleusercontent.com/3_f350mZQuocm7Lx2eASxHJHG5s5ynrrD0cQaIMeUMpDSYyz29J5FCHqnl14AXsV19D71qDUdg=s900-c-k-c0x00ffffff-no-rj',
+    url: 'https://d1g8wgjurz8via.cloudfront.net/bpk-tv/ColorsHD/default/ColorsHD-video=2137600.m3u8',
+    quality: 'HD HLS',
+    protocol: 'HLS',
+    color: 'linear-gradient(135deg, rgba(255,152,0,0.15), rgba(255,87,34,0.05))',
+    category: 'Entertainment',
+    description: 'Z Bangla Live',
+  },
+];
+
+// ────────────────────────────────────────────────────────────
+// STATE
+// ────────────────────────────────────────────────────────────
+let hlsInstance = null;
+let mpegtsInstance = null;
+let currentChannel = null;
+let currentQuality = 'auto';
+let isMuted = false;
+let retryCount = 0;
+const MAX_RETRIES = 3;
+
+// ────────────────────────────────────────────────────────────
+// DOM REFS
+// ────────────────────────────────────────────────────────────
+const video            = document.getElementById('mainVideo');
+const videoOverlay     = document.getElementById('videoOverlay');
+const loadingSpinner   = document.getElementById('loadingSpinner');
+const errorOverlay     = document.getElementById('errorOverlay');
+const customControls   = document.getElementById('customControls');
+const nowPlayingName   = document.getElementById('nowPlayingName');
+const playIcon         = document.getElementById('playIcon');
+const muteBtn          = document.getElementById('muteBtn');
+const volumeSlider     = document.getElementById('volumeSlider');
+const qualityBtn       = document.getElementById('qualityBtn');
+const qualityMenu      = document.getElementById('qualityMenu');
+const connectionStatus = document.getElementById('connectionStatus');
+const resolutionInfo   = document.getElementById('resolutionInfo');
+const bitrateInfo      = document.getElementById('bitrateInfo');
+const protocolInfo     = document.getElementById('protocolInfo');
+const channelsGrid     = document.getElementById('channelsGrid');
+const sidebarChannels  = document.getElementById('sidebarChannels');
+const errorMsg         = document.getElementById('errorMsg');
+
+// ────────────────────────────────────────────────────────────
+// INIT
+// ────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  renderChannelCards();
+  renderSidebarChannels();
+  renderSchedule();
+  initParticles();
+  initHeaderScroll();
+  initVideoEvents();
+  setVolume(80);
+  createToastContainer();
+});
+
+// ────────────────────────────────────────────────────────────
+// RENDER CHANNEL CARDS
+// ────────────────────────────────────────────────────────────
+function renderChannelCards() {
+  channelsGrid.innerHTML = '';
+  CHANNELS.forEach(ch => {
+    const card = document.createElement('div');
+    card.className = 'channel-card';
+    card.id = `card-${ch.id}`;
+    card.onclick = () => playChannel(ch);
+    const mediaHtml = ch.logo 
+      ? `<img src="${ch.logo}" alt="${ch.name}" class="card-logo-img">` 
+      : `<div class="card-emoji">${ch.emoji}</div>`;
+    card.innerHTML = `
+      ${mediaHtml}
+      <div class="card-name">${ch.name}</div>
+      <div class="card-live-badge">
+        <span class="card-live-dot"></span>
+        LIVE
+      </div>
+      <div class="card-quality">${ch.quality} · ${ch.category}</div>
+      <button class="card-watch-btn">▶ Watch Live</button>
+    `;
+    channelsGrid.appendChild(card);
+  });
+}
+
+function renderSidebarChannels() {
+  sidebarChannels.innerHTML = '';
+  CHANNELS.forEach(ch => {
+    const item = document.createElement('div');
+    item.className = 'sidebar-item';
+    item.id = `sidebar-${ch.id}`;
+    item.onclick = () => playChannel(ch);
+    const mediaHtml = ch.logo 
+      ? `<img src="${ch.logo}" alt="${ch.name}" class="sidebar-logo-img">` 
+      : `<span class="sidebar-item-emoji">${ch.emoji}</span>`;
+    item.innerHTML = `
+      ${mediaHtml}
+      <div>
+        <div class="sidebar-item-name">${ch.name}</div>
+        <div class="sidebar-item-quality">${ch.quality}</div>
+      </div>
+    `;
+    sidebarChannels.appendChild(item);
+  });
+}
+
+// ────────────────────────────────────────────────────────────
+// RENDER SCHEDULE
+// ────────────────────────────────────────────────────────────
+function renderSchedule() {
+  const grid = document.getElementById('scheduleGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  SCHEDULE.forEach(match => {
+    const card = document.createElement('div');
+    card.className = 'match-card';
+    const statusLabel = match.status === 'live' ? `<span class="match-status-dot"></span> LIVE` :
+                        match.status === 'finished' ? 'FULL TIME' : 'UPCOMING';
+    const scoreBlock = match.status === 'upcoming'
+      ? `<div class="match-vs">VS</div>`
+      : `<div class="match-score">${match.scoreH} – ${match.scoreA}</div>
+         <div class="match-time-detail">${match.time}</div>`;
+    card.innerHTML = `
+      <div class="match-status ${match.status}">${statusLabel}</div>
+      <div class="match-teams">
+        <div class="match-team">
+          <div class="team-flag">${match.home.split(' ')[0]}</div>
+          <div class="team-name">${match.home.split(' ').slice(1).join(' ')}</div>
+        </div>
+        <div class="match-score-wrap">${scoreBlock}</div>
+        <div class="match-team">
+          <div class="team-flag">${match.away.split(' ')[0]}</div>
+          <div class="team-name">${match.away.split(' ').slice(1).join(' ')}</div>
+        </div>
+      </div>
+      <div class="match-meta">
+        <span class="match-group">${match.group}</span>
+        <span class="match-datetime">${match.datetime}</span>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+// ────────────────────────────────────────────────────────────
+// PLAY CHANNEL
+// ────────────────────────────────────────────────────────────
+function playChannel(channel) {
+  if (currentChannel?.id === channel.id) {
+    // If same channel, just scroll to player
+    scrollToPlayer();
+    return;
+  }
+
+  currentChannel = channel;
+  retryCount = 0;
+
+  // Update UI highlights
+  document.querySelectorAll('.channel-card').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.sidebar-item').forEach(c => c.classList.remove('active'));
+  const card = document.getElementById(`card-${channel.id}`);
+  const sidebar = document.getElementById(`sidebar-${channel.id}`);
+  if (card) card.classList.add('active');
+  if (sidebar) sidebar.classList.add('active');
+
+  nowPlayingName.textContent = channel.name;
+  protocolInfo.textContent = channel.protocol;
+
+  hideAllOverlays();
+  showLoading(true);
+
+  // Destroy previous HLS/mpegts
+  if (hlsInstance) {
+    hlsInstance.destroy();
+    hlsInstance = null;
+  }
+  if (mpegtsInstance) {
+    mpegtsInstance.destroy();
+    mpegtsInstance = null;
+  }
+
+  let url = channel.url;
+
+  // Determine stream type
+  const isHLS = url.includes('.m3u8') || url.includes('/tracks-v');
+  const isTS  = url.endsWith('.ts');
+
+  // If it is a raw TS file, we route it through our proxy to avoid CORS
+  if (isTS) {
+    // If running on a server that has /proxy, use it. Otherwise fallback to raw url.
+    if (window.location.protocol.startsWith('http')) {
+      url = `/proxy?url=${encodeURIComponent(url)}`;
+    }
+    loadWithMpegts(url, channel);
+  } else if (isHLS) {
+    if (Hls.isSupported()) {
+      loadWithHLS(url, channel);
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      loadNative(url, channel);
+    } else {
+      showError('HLS is not supported on this browser. Try Chrome or Firefox.');
+      return;
+    }
+  } else {
+    loadNative(url, channel);
+  }
+
+  scrollToPlayer();
+  showToast(`📺 Loading ${channel.name}…`, 'info');
+}
+
+function loadWithMpegts(url, channel) {
+  if (mpegts.getFeatureList().mseLivePlayback) {
+    mpegtsInstance = mpegts.createPlayer({
+      type: 'ts',
+      isLive: true,
+      url: url
+    });
+    
+    mpegtsInstance.attachMediaElement(video);
+    mpegtsInstance.load();
+    
+    mpegtsInstance.on(mpegts.Events.ERROR, (errorType, errorDetail, errorInfo) => {
+      console.error('mpegts error:', errorType, errorDetail, errorInfo);
+      handleMpegtsError(errorType, channel);
+    });
+
+    video.play().then(() => {
+      showLoading(false);
+      showControls(true);
+      connectionStatus.textContent = 'Connected ✓';
+      resolutionInfo.textContent = channel.quality;
+      bitrateInfo.textContent = 'Auto';
+      showToast(`✅ Now watching ${channel.name}`, 'success');
+    }).catch(e => {
+      // Auto-play might be blocked
+    });
+  } else {
+    showError('Your browser does not support raw TS playback.');
+  }
+}
+
+function handleMpegtsError(errorType, channel) {
+  if (retryCount < MAX_RETRIES) {
+    retryCount++;
+    showToast(`⚡ Reconnecting… (${retryCount}/${MAX_RETRIES})`, 'info');
+    setTimeout(() => {
+      if (mpegtsInstance) {
+        mpegtsInstance.unload();
+        mpegtsInstance.load();
+        mpegtsInstance.play();
+      }
+    }, 2000 * retryCount);
+  } else {
+    showLoading(false);
+    showError('Network error: The stream could not be reached or CORS was blocked.');
+  }
+}
+
+// Check if a codec string contains HEVC/H.265 (not supported in Chrome/Firefox)
+function isHEVCCodec(codecStr) {
+  if (!codecStr) return false;
+  return codecStr.toLowerCase().includes('hvc1') ||
+         codecStr.toLowerCase().includes('hev1') ||
+         codecStr.toLowerCase().includes('dvh1') ||
+         codecStr.toLowerCase().includes('dvhe');
+}
+
+// Find the best H.264 level index (-1 if none found)
+function findBestH264Level(levels) {
+  // Sort by bitrate descending so we pick the best quality first
+  const h264Levels = levels
+    .map((l, idx) => ({ l, idx }))
+    .filter(({ l }) => !isHEVCCodec(l.videoCodec))
+    .sort((a, b) => (b.l.bitrate || 0) - (a.l.bitrate || 0));
+  return h264Levels.length ? h264Levels[0].idx : -1;
+}
+
+function loadWithHLS(url, channel) {
+  const hls = new Hls({
+    enableWorker: true,
+    lowLatencyMode: true,
+    backBufferLength: 60,
+    maxBufferLength: 30,
+    maxMaxBufferLength: 60,
+    // Prefer H.264 over HEVC by filtering at startup
+    startLevel: -1,
+    autoStartLoad: true,
+    xhrSetup(xhr) {
+      xhr.withCredentials = false;
+    },
+  });
+
+  hlsInstance = hls;
+
+  hls.loadSource(url);
+  hls.attachMedia(video);
+
+  hls.on(Hls.Events.MANIFEST_PARSED, (event, data) => {
+    const levels = data.levels;
+
+    // --- Codec Check: skip HEVC-only streams ---
+    const allHEVC = levels.length > 0 && levels.every(l => isHEVCCodec(l.videoCodec));
+    const bestH264 = findBestH264Level(levels);
+
+    if (allHEVC) {
+      // All levels are HEVC — browser will show black screen
+      // Show a codec warning banner but still try to play (audio will work)
+      showCodecWarning();
+      connectionStatus.textContent = 'HEVC ⚠';
+    } else if (bestH264 >= 0 && bestH264 !== hls.currentLevel) {
+      // Force switch to best H.264 level to avoid black screen
+      hls.currentLevel = bestH264;
+    }
+
+    showLoading(false);
+    showControls(true);
+    updateQualityLevels(levels);
+    video.play().catch(() => {});
+    connectionStatus.textContent = allHEVC ? 'HEVC ⚠' : 'Connected ✓';
+    resolutionInfo.textContent = levels.length ? getMaxResolution(levels) : channel.quality;
+    bitrateInfo.textContent = levels.length ? formatBitrate(levels[0].bitrate) : '—';
+    if (!allHEVC) showToast(`✅ Now watching ${channel.name}`, 'success');
+  });
+
+  hls.on(Hls.Events.LEVEL_SWITCHED, (event, data) => {
+    const level = hls.levels[data.level];
+    if (level) {
+      // If we accidentally switched to an HEVC level, switch back
+      if (isHEVCCodec(level.videoCodec)) {
+        const alt = findBestH264Level(hls.levels);
+        if (alt >= 0) { hls.currentLevel = alt; return; }
+      }
+      resolutionInfo.textContent = `${level.height}p`;
+      bitrateInfo.textContent = formatBitrate(level.bitrate);
+    }
+  });
+
+  hls.on(Hls.Events.ERROR, (event, data) => {
+    handleHLSError(data, channel);
+  });
+}
+
+// Show a small codec warning inside the player area
+function showCodecWarning() {
+  // Remove existing warning if any
+  const old = document.getElementById('codecWarning');
+  if (old) old.remove();
+
+  const warn = document.createElement('div');
+  warn.id = 'codecWarning';
+  warn.style.cssText = `
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255,165,0,0.92);
+    color: #000;
+    font-weight: 700;
+    font-size: 0.78rem;
+    padding: 7px 16px;
+    border-radius: 999px;
+    z-index: 15;
+    white-space: nowrap;
+    pointer-events: none;
+    font-family: Outfit, sans-serif;
+    letter-spacing: 0.3px;
+  `;
+  warn.textContent = '⚠ HEVC stream – video may be black on Chrome. Audio playing.';
+  document.getElementById('videoContainer').appendChild(warn);
+  // Auto-hide after 8 seconds
+  setTimeout(() => warn.remove(), 8000);
+}
+
+function loadNative(url, channel) {
+  video.src = url;
+  video.load();
+  video.play()
+    .then(() => {
+      showLoading(false);
+      showControls(true);
+      connectionStatus.textContent = 'Connected ✓';
+      resolutionInfo.textContent = channel.quality;
+      bitrateInfo.textContent = 'Auto';
+      showToast(`✅ Now watching ${channel.name}`, 'success');
+    })
+    .catch(err => {
+      showLoading(false);
+      showError(`Could not play stream. Error: ${err.message}`);
+    });
+}
+
+function handleHLSError(data, channel) {
+  if (data.fatal) {
+    switch (data.type) {
+      case Hls.ErrorTypes.NETWORK_ERROR:
+        if (retryCount < MAX_RETRIES) {
+          retryCount++;
+          showToast(`⚡ Reconnecting… (${retryCount}/${MAX_RETRIES})`, 'info');
+          setTimeout(() => {
+            if (hlsInstance) hlsInstance.startLoad();
+          }, 2000 * retryCount);
+        } else {
+          showLoading(false);
+          showError('Network error: The stream could not be reached. It may be offline or region-locked.');
+        }
+        break;
+      case Hls.ErrorTypes.MEDIA_ERROR:
+        if (retryCount < MAX_RETRIES) {
+          retryCount++;
+          hlsInstance.recoverMediaError();
+          showToast(`🔄 Recovering stream… (${retryCount}/${MAX_RETRIES})`, 'info');
+        } else {
+          showLoading(false);
+          showError('Media decode error. The stream format may be incompatible with your browser.');
+        }
+        break;
+      default:
+        showLoading(false);
+        showError('An unknown error occurred. Please try another channel.');
+        break;
+    }
+  }
+}
+
+// ────────────────────────────────────────────────────────────
+// QUALITY CONTROL
+// ────────────────────────────────────────────────────────────
+function updateQualityLevels(levels) {
+  const menu = document.getElementById('qualityMenu');
+  // Remove old dynamic options
+  const existing = menu.querySelectorAll('.quality-option[data-dynamic]');
+  existing.forEach(e => e.remove());
+
+  if (levels && levels.length > 1) {
+    const header = menu.querySelector('.quality-menu-header');
+    levels.forEach((level, idx) => {
+      const btn = document.createElement('button');
+      btn.className = 'quality-option';
+      btn.setAttribute('data-dynamic', 'true');
+      btn.setAttribute('data-level', idx);
+      btn.textContent = `🎞 ${level.height}p (${formatBitrate(level.bitrate)})`;
+      btn.onclick = () => setQualityLevel(idx);
+      menu.appendChild(btn);
+    });
+  }
+}
+
+function toggleQualityMenu() {
+  qualityMenu.classList.toggle('open');
+}
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.quality-wrap')) {
+    qualityMenu.classList.remove('open');
+  }
+});
+
+function setQuality(q) {
+  currentQuality = q;
+  qualityMenu.classList.remove('open');
+
+  document.querySelectorAll('.quality-option').forEach(btn => btn.classList.remove('active'));
+  document.querySelector(`.quality-option[data-quality="${q}"]`)?.classList.add('active');
+
+  if (!hlsInstance) return;
+
+  switch(q) {
+    case 'auto':
+      hlsInstance.currentLevel = -1;
+      qualityBtn.textContent = '⚙ Auto';
+      break;
+    case '1080':
+      setClosestLevel(1080);
+      break;
+    case '720':
+      setClosestLevel(720);
+      break;
+    case '480':
+      setClosestLevel(480);
+      break;
+    case '360':
+      setClosestLevel(360);
+      break;
+  }
+  showToast(`🎮 Quality: ${q === 'auto' ? 'Auto' : q + 'p'}`, 'info');
+}
+
+function setQualityLevel(idx) {
+  if (!hlsInstance) return;
+  hlsInstance.currentLevel = idx;
+  const level = hlsInstance.levels[idx];
+  qualityBtn.textContent = `⚙ ${level.height}p`;
+  qualityMenu.classList.remove('open');
+
+  document.querySelectorAll('.quality-option').forEach(btn => btn.classList.remove('active'));
+  document.querySelector(`.quality-option[data-level="${idx}"]`)?.classList.add('active');
+
+  showToast(`🎮 Quality: ${level.height}p`, 'info');
+}
+
+function setClosestLevel(targetHeight) {
+  if (!hlsInstance || !hlsInstance.levels.length) return;
+  const levels = hlsInstance.levels;
+  let closest = 0;
+  let minDiff = Infinity;
+  levels.forEach((level, idx) => {
+    const diff = Math.abs(level.height - targetHeight);
+    if (diff < minDiff) { minDiff = diff; closest = idx; }
+  });
+  hlsInstance.currentLevel = closest;
+  qualityBtn.textContent = `⚙ ${levels[closest].height}p`;
+}
+
+// ────────────────────────────────────────────────────────────
+// VIDEO CONTROLS
+// ────────────────────────────────────────────────────────────
+function initVideoEvents() {
+  video.addEventListener('play', () => { playIcon.textContent = '⏸'; });
+  video.addEventListener('pause', () => { playIcon.textContent = '▶'; });
+
+  // canplay fires as soon as the browser can start playing
+  // This ensures loading spinner is dismissed even for HEVC streams
+  // where MANIFEST_PARSED may not dismiss it properly
+  video.addEventListener('canplay', () => {
+    showLoading(false);
+    showControls(true);
+  });
+
+  video.addEventListener('waiting', () => {
+    // Show a subtle buffering indicator without hiding controls
+    if (customControls.style.display !== 'none') {
+      connectionStatus.textContent = 'Buffering…';
+    }
+  });
+
+  video.addEventListener('playing', () => {
+    connectionStatus.textContent = 'Streaming ●';
+    // Dismiss loading spinner if still visible
+    showLoading(false);
+    showControls(true);
+    // Remove error overlay if visible (recovered after retry)
+    errorOverlay.style.display = 'none';
+  });
+
+  video.addEventListener('volumechange', () => {
+    isMuted = video.muted || video.volume === 0;
+    muteBtn.textContent = isMuted ? '🔇' : (video.volume < 0.4 ? '🔉' : '🔊');
+    volumeSlider.value = Math.round(video.volume * 100);
+  });
+
+  video.addEventListener('stalled', () => {
+    if (currentChannel) connectionStatus.textContent = 'Stalled…';
+  });
+
+  // Double-click fullscreen
+  video.addEventListener('dblclick', toggleFullscreen);
+}
+
+
+function togglePlayPause() {
+  if (!currentChannel) return;
+  if (video.paused) {
+    video.play();
+  } else {
+    video.pause();
+  }
+}
+
+function toggleMute() {
+  video.muted = !video.muted;
+  if (video.muted) {
+    muteBtn.textContent = '🔇';
+    volumeSlider.value = 0;
+  } else {
+    muteBtn.textContent = '🔊';
+    volumeSlider.value = Math.round(video.volume * 100);
+  }
+}
+
+function setVolume(val) {
+  const v = parseInt(val) / 100;
+  video.volume = v;
+  video.muted = v === 0;
+  muteBtn.textContent = v === 0 ? '🔇' : (v < 0.4 ? '🔉' : '🔊');
+}
+
+function toggleFullscreen() {
+  const container = document.getElementById('videoContainer');
+  if (!document.fullscreenElement) {
+    container.requestFullscreen?.() || container.webkitRequestFullscreen?.();
+  } else {
+    document.exitFullscreen?.() || document.webkitExitFullscreen?.();
+  }
+}
+
+async function togglePiP() {
+  if (!currentChannel) {
+    showToast('▶ Select a channel first', 'error');
+    return;
+  }
+
+  // ── Exit existing PiP ──
+  if (document.pictureInPictureElement) {
+    await document.exitPictureInPicture().catch(() => {});
+    showToast('🔲 Exited Picture-in-Picture', 'info');
+    return;
+  }
+
+  // ── Exit custom mini-player if open ──
+  const existing = document.getElementById('customMiniPlayer');
+  if (existing) {
+    closeMiniPlayer();
+    return;
+  }
+
+  // ── Try native PiP first ──
+  if (document.pictureInPictureEnabled && !video.disablePictureInPicture) {
+    // PiP requires video to have loaded at least metadata
+    if (video.readyState < 1) {
+      showToast('⏳ Wait for stream to load first', 'info');
+      return;
+    }
+    try {
+      await video.requestPictureInPicture();
+      showToast('📺 Picture-in-Picture activated', 'info');
+
+      // Update button icon when PiP closes
+      video.addEventListener('leavepictureinpicture', () => {
+        const pipBtns = document.querySelectorAll('[title="Picture-in-Picture"], [title="Picture in Picture"]');
+        pipBtns.forEach(b => b.textContent = '⛶');
+      }, { once: true });
+
+      // Update button icon
+      const pipBtns = document.querySelectorAll('[title="Picture-in-Picture"], [title="Picture in Picture"]');
+      pipBtns.forEach(b => b.textContent = '✕⛶');
+      return;
+    } catch (e) {
+      console.warn('Native PiP failed, falling back to custom mini-player:', e.message);
+    }
+  }
+
+  // ── Custom floating mini-player fallback ──
+  openMiniPlayer();
+}
+
+function openMiniPlayer() {
+  const mini = document.createElement('div');
+  mini.id = 'customMiniPlayer';
+  mini.style.cssText = `
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 320px;
+    height: 180px;
+    background: #000;
+    border: 2px solid rgba(255,107,53,0.6);
+    border-radius: 12px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.7), 0 0 20px rgba(255,107,53,0.2);
+    z-index: 9999;
+    overflow: hidden;
+    cursor: move;
+    user-select: none;
+  `;
+
+  // Clone video src into mini player
+  const miniVideo = document.createElement('video');
+  miniVideo.style.cssText = 'width:100%;height:100%;object-fit:contain;background:#000;';
+  miniVideo.autoplay = true;
+  miniVideo.muted = video.muted;
+  miniVideo.volume = video.volume;
+
+  // Share the same MediaSource by re-attaching HLS or mpegts to the mini video
+  if (hlsInstance) {
+    const miniHls = new Hls({ startLevel: hlsInstance.currentLevel });
+    miniHls.loadSource(currentChannel.url);
+    miniHls.attachMedia(miniVideo);
+    miniVideo._miniHls = miniHls;
+  } else if (mpegtsInstance) {
+    miniVideo.src = video.src;
+  } else if (video.src) {
+    miniVideo.src = video.src;
+  }
+
+  // Close button
+  const closeBtn = document.createElement('button');
+  closeBtn.textContent = '✕';
+  closeBtn.title = 'Close mini player';
+  closeBtn.style.cssText = `
+    position: absolute;
+    top: 6px; right: 8px;
+    background: rgba(0,0,0,0.7);
+    border: none;
+    color: #fff;
+    font-size: 0.9rem;
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 2;
+    display: flex; align-items: center; justify-content: center;
+    font-family: Outfit, sans-serif;
+  `;
+  closeBtn.onclick = closeMiniPlayer;
+
+  // Channel label
+  const label = document.createElement('div');
+  label.textContent = currentChannel.name;
+  label.style.cssText = `
+    position: absolute;
+    bottom: 6px; left: 10px;
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: Outfit, sans-serif;
+    pointer-events: none;
+  `;
+
+  mini.appendChild(miniVideo);
+  mini.appendChild(closeBtn);
+  mini.appendChild(label);
+  document.body.appendChild(mini);
+
+  // Drag support
+  let isDragging = false, startX, startY, origLeft, origBottom;
+  mini.addEventListener('mousedown', (e) => {
+    if (e.target === closeBtn) return;
+    isDragging = true;
+    startX = e.clientX;
+    startY = e.clientY;
+    const rect = mini.getBoundingClientRect();
+    origLeft = rect.left;
+    origBottom = window.innerHeight - rect.bottom;
+    mini.style.right = 'auto';
+    mini.style.bottom = 'auto';
+    mini.style.left = origLeft + 'px';
+    mini.style.top = (window.innerHeight - origBottom - rect.height) + 'px';
+  });
+  document.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    mini.style.left = (origLeft + e.clientX - startX) + 'px';
+    mini.style.top = ((window.innerHeight - origBottom - mini.offsetHeight) + e.clientY - startY) + 'px';
+  });
+  document.addEventListener('mouseup', () => { isDragging = false; });
+
+  showToast('📺 Mini Player opened', 'info');
+}
+
+function closeMiniPlayer() {
+  const mini = document.getElementById('customMiniPlayer');
+  if (!mini) return;
+  const miniVideo = mini.querySelector('video');
+  if (miniVideo) {
+    if (miniVideo._miniHls) { miniVideo._miniHls.destroy(); }
+    miniVideo.pause();
+    miniVideo.src = '';
+  }
+  mini.remove();
+  showToast('🔲 Mini Player closed', 'info');
+}
+
+
+function retryStream() {
+  if (!currentChannel) return;
+  retryCount = 0;
+  const ch = currentChannel;
+  currentChannel = null;
+  playChannel(ch);
+}
+
+// ────────────────────────────────────────────────────────────
+// UI HELPERS
+// ────────────────────────────────────────────────────────────
+function hideAllOverlays() {
+  videoOverlay.style.display = 'none';
+  loadingSpinner.style.display = 'none';
+  errorOverlay.style.display = 'none';
+}
+
+function showLoading(show) {
+  loadingSpinner.style.display = show ? 'flex' : 'none';
+  if (show) {
+    errorOverlay.style.display = 'none';
+    videoOverlay.style.display = 'none';
+  }
+}
+
+function showError(msg) {
+  errorMsg.textContent = msg;
+  errorOverlay.style.display = 'flex';
+  loadingSpinner.style.display = 'none';
+  customControls.style.display = 'none';
+  connectionStatus.textContent = 'Error ✗';
+}
+
+function showControls(show) {
+  customControls.style.display = show ? 'block' : 'none';
+}
+
+// ────────────────────────────────────────────────────────────
+// SCROLL HELPERS
+// ────────────────────────────────────────────────────────────
+function scrollToChannels() {
+  document.getElementById('channels-section').scrollIntoView({ behavior: 'smooth' });
+}
+
+function scrollToPlayer() {
+  setTimeout(() => {
+    document.getElementById('player-section').scrollIntoView({ behavior: 'smooth' });
+  }, 100);
+}
+
+// ────────────────────────────────────────────────────────────
+// TOAST NOTIFICATIONS
+// ────────────────────────────────────────────────────────────
+function createToastContainer() {
+  const container = document.createElement('div');
+  container.className = 'toast-container';
+  container.id = 'toastContainer';
+  document.body.appendChild(container);
+}
+
+function showToast(message, type = 'info') {
+  const container = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.textContent = message;
+  container.appendChild(toast);
+  setTimeout(() => {
+    toast.style.animation = 'slideOutRight 0.3s ease forwards';
+    toast.addEventListener('animationend', () => toast.remove());
+  }, 3000);
+}
+
+// ────────────────────────────────────────────────────────────
+// HEADER SCROLL EFFECT
+// ────────────────────────────────────────────────────────────
+function initHeaderScroll() {
+  const header = document.getElementById('main-header');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 50);
+  }, { passive: true });
+}
+
+// ────────────────────────────────────────────────────────────
+// PARTICLES
+// ────────────────────────────────────────────────────────────
+function initParticles() {
+  const container = document.getElementById('particles');
+  if (!container) return;
+  // World Cup gold/green particles
+  const COLORS = [
+    'rgba(240,181,24,0.7)',
+    'rgba(240,181,24,0.4)',
+    'rgba(0,200,83,0.5)',
+    'rgba(255,255,255,0.3)',
+    'rgba(201,148,26,0.5)',
+  ];
+  const count = 30;
+  for (let i = 0; i < count; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = Math.random() * 5 + 2;
+    const duration = Math.random() * 14 + 8;
+    const delay = Math.random() * 12;
+    const left = Math.random() * 100;
+    const color = COLORS[Math.floor(Math.random() * COLORS.length)];
+    p.style.cssText = `
+      width: ${size}px;
+      height: ${size}px;
+      background: ${color};
+      left: ${left}%;
+      animation-duration: ${duration}s;
+      animation-delay: ${delay}s;
+      box-shadow: 0 0 ${size * 2.5}px ${color};
+    `;
+    container.appendChild(p);
+  }
+}
+
+// ────────────────────────────────────────────────────────────
+// FORMAT HELPERS
+// ────────────────────────────────────────────────────────────
+function formatBitrate(bps) {
+  if (!bps) return '—';
+  if (bps >= 1_000_000) return `${(bps / 1_000_000).toFixed(1)} Mbps`;
+  return `${Math.round(bps / 1000)} Kbps`;
+}
+
+function getMaxResolution(levels) {
+  const max = levels.reduce((a, b) => (a.height > b.height ? a : b), levels[0]);
+  return max.height ? `${max.height}p` : 'Auto';
+}
+
+// ────────────────────────────────────────────────────────────
+// KEYBOARD SHORTCUTS
+// ────────────────────────────────────────────────────────────
+document.addEventListener('keydown', (e) => {
+  if (e.target.tagName === 'INPUT') return;
+  switch (e.key) {
+    case ' ':
+    case 'k':
+      e.preventDefault();
+      togglePlayPause();
+      break;
+    case 'f':
+      toggleFullscreen();
+      break;
+    case 'm':
+      toggleMute();
+      break;
+    case 'ArrowUp':
+      e.preventDefault();
+      setVolume(Math.min(100, parseInt(volumeSlider.value) + 10));
+      break;
+    case 'ArrowDown':
+      e.preventDefault();
+      setVolume(Math.max(0, parseInt(volumeSlider.value) - 10));
+      break;
+    case 'p':
+      togglePiP();
+      break;
+  }
+});
+
+// ────────────────────────────────────────────────────────────
+// MOBILE MENU TOGGLE (optional)
+// ────────────────────────────────────────────────────────────
+document.getElementById('menuToggle').addEventListener('click', () => {
+  const nav = document.querySelector('.nav-links');
+  if (nav) {
+    if (nav.style.display === 'flex') {
+      nav.style.display = 'none';
+    } else {
+      nav.style.cssText = `
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 68px;
+        left: 0;
+        right: 0;
+        background: rgba(8,12,20,0.97);
+        padding: 20px 24px;
+        border-bottom: 1px solid rgba(255,255,255,0.07);
+        gap: 20px;
+        z-index: 999;
+        backdrop-filter: blur(20px);
+      `;
+    }
+  }
+});
