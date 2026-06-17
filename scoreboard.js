@@ -100,7 +100,18 @@ async function sbLoadLive() {
         ? `<span class="sb-live-indicator">● LIVE</span> ${liveCount} live · ${events.length} total today`
         : `${events.length} match${events.length > 1 ? 'es' : ''} today`;
 
-      grid.innerHTML = events.map(renderMatchCard).join('');
+      // Sort matches into three categories: Live, Upcoming, Past
+      const liveMatches = events.filter(e => e.status?.type?.state === 'in');
+      const upcomingMatches = events.filter(e => e.status?.type?.state === 'pre');
+      const pastMatches = events.filter(e => e.status?.type?.state === 'post');
+
+      // Upcoming: ascending (soonest first)
+      upcomingMatches.sort((a, b) => new Date(a.date) - new Date(b.date));
+      // Past: descending (most recently finished first)
+      pastMatches.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+      const sortedEvents = [...liveMatches, ...upcomingMatches, ...pastMatches];
+      grid.innerHTML = sortedEvents.map(renderMatchCard).join('');
     }
 
     const now = new Date();
