@@ -962,10 +962,25 @@ function setVolume(val) {
 
 function toggleFullscreen() {
   const container = document.getElementById('videoContainer');
-  if (!document.fullscreenElement) {
-    container.requestFullscreen?.() || container.webkitRequestFullscreen?.();
+  const videoElement = document.getElementById('mainVideo');
+  
+  if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+    if (container.requestFullscreen) {
+      container.requestFullscreen();
+    } else if (container.webkitRequestFullscreen) {
+      container.webkitRequestFullscreen();
+    } else if (videoElement.webkitEnterFullscreen) {
+      // Fallback for iOS Safari which only allows fullscreen on the video element itself
+      videoElement.webkitEnterFullscreen();
+    }
   } else {
-    document.exitFullscreen?.() || document.webkitExitFullscreen?.();
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    } else if (videoElement.webkitExitFullscreen) {
+      videoElement.webkitExitFullscreen();
+    }
   }
 }
 
