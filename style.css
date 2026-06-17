@@ -1798,3 +1798,16 @@ body {
   letter-spacing: 0.5px;
   text-align: center;
 }
+
+/* ---------- AUTO-HIDE CONTROLS ---------- */
+.video-container.hide-controls {
+  cursor: none;
+}
+.video-container.hide-controls .player-controls,
+.video-container.hide-controls .video-topbar {
+  opacity: 0 !important;
+  pointer-events: none;
+}
+.player-controls, .video-topbar {
+  transition: opacity 0.4s ease, transform 0.3s ease;
+}

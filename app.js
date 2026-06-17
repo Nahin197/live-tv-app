@@ -1175,6 +1175,39 @@ function showControls(show) {
 }
 
 // ────────────────────────────────────────────────────────────
+// AUTO-HIDE CONTROLS
+// ────────────────────────────────────────────────────────────
+let hideControlsTimeout;
+
+function resetControlsHideTimer() {
+  const container = document.getElementById('videoContainer');
+  if (!container) return;
+  
+  container.classList.remove('hide-controls');
+  clearTimeout(hideControlsTimeout);
+  
+  hideControlsTimeout = setTimeout(() => {
+    if (!video.paused && currentChannel) {
+      container.classList.add('hide-controls');
+    }
+  }, 4000);
+}
+
+const vContainer = document.getElementById('videoContainer');
+vContainer.addEventListener('mousemove', resetControlsHideTimer);
+vContainer.addEventListener('click', resetControlsHideTimer);
+vContainer.addEventListener('mouseleave', () => {
+  if (!video.paused && currentChannel) {
+    vContainer.classList.add('hide-controls');
+  }
+});
+video.addEventListener('play', resetControlsHideTimer);
+video.addEventListener('pause', () => {
+  vContainer.classList.remove('hide-controls');
+  clearTimeout(hideControlsTimeout);
+});
+
+// ────────────────────────────────────────────────────────────
 // SCROLL HELPERS
 // ────────────────────────────────────────────────────────────
 function scrollToChannels() {
