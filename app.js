@@ -670,7 +670,7 @@ function findBestH264Level(levels) {
 }
 
 function loadWithHLS(url, channel) {
-  const hls = new Hls({
+  const hlsConfig = {
     enableWorker: true,
     lowLatencyMode: true,
     backBufferLength: 60,
@@ -682,7 +682,35 @@ function loadWithHLS(url, channel) {
     xhrSetup(xhr) {
       xhr.withCredentials = false;
     },
-  });
+  };
+
+  // If protocol asks for proxy, or it's mixed content (HTTP stream on HTTPS site)
+  const needsProxy = channel.protocol === 'HLS Proxy' || (window.location.protocol === 'https:' && url.startsWith('http:'));
+
+  if (needsProxy) {
+    class ProxyLoader extends Hls.DefaultConfig.loader {
+      load(context, config, callbacks) {
+        const originalUrl = context.url;
+        // Route through our backend proxy
+        if (!originalUrl.startsWith('/proxy')) {
+          context.url = `/proxy?url=${encodeURIComponent(originalUrl)}`;
+        }
+        
+        const originalOnSuccess = callbacks.onSuccess;
+        callbacks.onSuccess = (response, stats, context, networkDetails) => {
+          // Trick HLS.js into resolving relative playlist paths against the original external URL
+          response.url = originalUrl;
+          originalOnSuccess(response, stats, context, networkDetails);
+        };
+        
+        super.load(context, config, callbacks);
+      }
+    }
+    hlsConfig.pLoader = ProxyLoader;
+    hlsConfig.fLoader = ProxyLoader;
+  }
+
+  const hls = new Hls(hlsConfig);
 
   hlsInstance = hls;
 
