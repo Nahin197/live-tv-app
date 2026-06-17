@@ -20,8 +20,7 @@ const CHANNELS = [
     color: 'linear-gradient(135deg, rgba(20,20,200,0.15), rgba(10,10,100,0.05))',
     language: 'English',
     category: 'Sports',
-    description: 'RTB Go Live Stream',
-    hot: true
+    description: 'RTB Go Live Stream'
   },
   {
     id: 'caze-tv',
@@ -1398,6 +1397,34 @@ socket.on('viewer_update', (data) => {
       if (channelViewerCount) {
         channelViewerCount.innerText = data.count;
       }
+    }
+  }
+});
+
+// Dynamic Hot Channel Updates
+socket.on('initial_hot_channels', (hotIds) => {
+  let changed = false;
+  hotIds.forEach(id => {
+    const ch = CHANNELS.find(c => c.id === id);
+    if (ch && !ch.hot) {
+      ch.hot = true;
+      changed = true;
+    }
+  });
+  if (changed) {
+    renderChannelCards();
+    renderSidebarChannels();
+  }
+});
+
+socket.on('hot_update', (data) => {
+  const ch = CHANNELS.find(c => c.id === data.channelId);
+  if (ch) {
+    ch.hot = data.isHot;
+    renderChannelCards();
+    renderSidebarChannels();
+    if (data.isHot) {
+      showToast(`🔥 ${ch.name} is now HOT!`, 'info');
     }
   }
 });
