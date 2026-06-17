@@ -14,6 +14,7 @@ const PORT = process.env.PORT || 4200;
 // -- Real-Time Viewer Tracking --
 let totalOnline = 0;
 const channelViewers = {}; // { 'channel-id': count }
+const channelPlaying = {}; // { 'channel-id': count } (Strictly for HOT status)
 
 // -- Hot Channel System --
 const hotChannels = new Set();
@@ -23,7 +24,8 @@ const HOT_DURATION = 30000; // 30 seconds per user request
 
 function checkHotStatus(channelId) {
   if (!channelId) return;
-  const count = channelViewers[channelId] || 0;
+  // HOT status now STRICTLY depends on actual playing video, not just being in the room
+  const count = channelPlaying[channelId] || 0;
   
   if (count >= HOT_THRESHOLD && !hotChannels.has(channelId)) {
     // Start timer if not already running
@@ -35,7 +37,7 @@ function checkHotStatus(channelId) {
       }, HOT_DURATION);
     }
   } else if (count < HOT_THRESHOLD) {
-    // Cancel the timer if viewers drop below threshold before the time is up
+    // Cancel the timer if playing viewers drop below threshold before the time is up
     if (channelTimers[channelId]) {
       clearTimeout(channelTimers[channelId]);
       delete channelTimers[channelId];
@@ -47,6 +49,7 @@ function checkHotStatus(channelId) {
 io.on('connection', (socket) => {
   totalOnline++;
   let currentChannel = null;
+  socket.isPlaying = false;
 
   // Send current viewer state to newly connected client
   socket.emit('viewer_update', { type: 'total', count: totalOnline });
@@ -58,19 +61,41 @@ io.on('connection', (socket) => {
   socket.on('join_channel', (channelId) => {
     // Leave previous channel room
     if (currentChannel) {
+      if (socket.isPlaying) {
+        socket.isPlaying = false;
+        channelPlaying[currentChannel] = Math.max(0, (channelPlaying[currentChannel] || 1) - 1);
+        checkHotStatus(currentChannel);
+      }
       socket.leave(currentChannel);
       channelViewers[currentChannel] = Math.max(0, (channelViewers[currentChannel] || 1) - 1);
       io.to(currentChannel).emit('viewer_update', { type: 'channel', channelId: currentChannel, count: channelViewers[currentChannel] });
-      checkHotStatus(currentChannel);
     }
 
     // Join new channel room
     currentChannel = channelId;
+    socket.isPlaying = false;
     if (currentChannel) {
       socket.join(currentChannel);
       channelViewers[currentChannel] = (channelViewers[currentChannel] || 0) + 1;
       io.to(currentChannel).emit('viewer_update', { type: 'channel', channelId: currentChannel, count: channelViewers[currentChannel] });
-      checkHotStatus(currentChannel);
+    }
+  });
+
+  socket.on('playing_status', (data) => {
+    if (currentChannel !== data.channelId) return;
+
+    if (data.isPlaying) {
+      if (!socket.isPlaying) {
+        socket.isPlaying = true;
+        channelPlaying[currentChannel] = (channelPlaying[currentChannel] || 0) + 1;
+        checkHotStatus(currentChannel);
+      }
+    } else {
+      if (socket.isPlaying) {
+        socket.isPlaying = false;
+        channelPlaying[currentChannel] = Math.max(0, (channelPlaying[currentChannel] || 1) - 1);
+        checkHotStatus(currentChannel);
+      }
     }
   });
 
@@ -79,9 +104,12 @@ io.on('connection', (socket) => {
     io.emit('viewer_update', { type: 'total', count: totalOnline });
 
     if (currentChannel) {
+      if (socket.isPlaying) {
+        channelPlaying[currentChannel] = Math.max(0, (channelPlaying[currentChannel] || 1) - 1);
+        checkHotStatus(currentChannel);
+      }
       channelViewers[currentChannel] = Math.max(0, (channelViewers[currentChannel] || 1) - 1);
       io.to(currentChannel).emit('viewer_update', { type: 'channel', channelId: currentChannel, count: channelViewers[currentChannel] });
-      checkHotStatus(currentChannel);
     }
   });
 });

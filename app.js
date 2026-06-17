@@ -897,7 +897,10 @@ function setClosestLevel(targetHeight) {
 // ────────────────────────────────────────────────────────────
 function initVideoEvents() {
   video.addEventListener('play', () => { playIcon.textContent = '⏸'; });
-  video.addEventListener('pause', () => { playIcon.textContent = '▶'; });
+  video.addEventListener('pause', () => { 
+    playIcon.textContent = '▶'; 
+    socket.emit('playing_status', { channelId: currentChannel?.id, isPlaying: false });
+  });
 
   // canplay fires as soon as the browser can start playing
   // This ensures loading spinner is dismissed even for HEVC streams
@@ -912,6 +915,7 @@ function initVideoEvents() {
     if (customControls.style.display !== 'none') {
       connectionStatus.textContent = 'Buffering…';
     }
+    socket.emit('playing_status', { channelId: currentChannel?.id, isPlaying: false });
   });
 
   video.addEventListener('playing', () => {
@@ -921,6 +925,7 @@ function initVideoEvents() {
     showControls(true);
     // Remove error overlay if visible (recovered after retry)
     errorOverlay.style.display = 'none';
+    socket.emit('playing_status', { channelId: currentChannel?.id, isPlaying: true });
   });
 
   video.addEventListener('volumechange', () => {
