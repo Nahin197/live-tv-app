@@ -54,13 +54,14 @@
   --trans-fast: 0.15s ease;
 }
 
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; overflow-x: hidden; max-width: 100%; }
 
 body {
   font-family: var(--font);
   background: var(--bg);
   color: #E8EDF8;
   overflow-x: hidden;
+  max-width: 100%;
   line-height: 1.6;
 }
 
@@ -1532,7 +1533,8 @@ body {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--r);
-  overflow: hidden;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .group-table-header {
