@@ -618,6 +618,8 @@ body {
   font-weight: 800;
   color: #fff;
   letter-spacing: 0.3px;
+  line-height: 1.3;
+  word-break: break-word;
 }
 
 .card-live-badge {
@@ -637,7 +639,13 @@ body {
 
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
 
-.card-quality { font-size: 0.75rem; color: rgba(255,255,255,0.35); font-weight: 500; }
+.card-quality { 
+  font-size: 0.75rem; 
+  color: rgba(255,255,255,0.35); 
+  font-weight: 500; 
+  line-height: 1.3;
+  word-break: break-word;
+}
 
 .card-watch-btn {
   background: var(--grad-gold);
@@ -1228,8 +1236,11 @@ body {
   .hero-ball { width: min(320px, 36vw); }
   .player-layout { grid-template-columns: 1fr; }
   .player-sidebar { max-height: 240px; }
-  .sidebar-list { flex-direction: row; overflow-x: auto; overflow-y: hidden; }
-  .sidebar-item { flex-direction: column; text-align: center; min-width: 80px; }
+  .sidebar-list { flex-direction: row; overflow-x: auto; overflow-y: hidden; padding-bottom: 12px; }
+  .sidebar-item { flex-direction: column; text-align: center; min-width: 110px; max-width: 130px; padding: 12px 6px; }
+  .sidebar-item > div { width: 100%; display: flex; flex-direction: column; align-items: center; }
+  .sidebar-item-name { font-size: 0.8rem; white-space: normal; line-height: 1.25; word-break: break-word; margin-bottom: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; }
+  .sidebar-item-quality { font-size: 0.65rem; white-space: normal; line-height: 1.25; word-break: break-word; }
   .sidebar-shortcuts { display: none; }
   .stats-bar { grid-template-columns: repeat(2,1fr); }
 }
