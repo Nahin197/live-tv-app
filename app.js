@@ -1003,12 +1003,12 @@ async function togglePiP() {
       // Update button icon when PiP closes
       video.addEventListener('leavepictureinpicture', () => {
         const pipBtns = document.querySelectorAll('[title="Picture-in-Picture"], [title="Picture in Picture"]');
-        pipBtns.forEach(b => b.textContent = '⛶');
+        pipBtns.forEach(b => b.textContent = '⤢');
       }, { once: true });
 
       // Update button icon
       const pipBtns = document.querySelectorAll('[title="Picture-in-Picture"], [title="Picture in Picture"]');
-      pipBtns.forEach(b => b.textContent = '✕⛶');
+      pipBtns.forEach(b => b.textContent = '✕⤢');
       return;
     } catch (e) {
       console.warn('Native PiP failed, falling back to custom mini-player:', e.message);
