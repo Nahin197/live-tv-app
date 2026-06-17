@@ -18,8 +18,8 @@ const channelViewers = {}; // { 'channel-id': count }
 // -- Hot Channel System --
 const hotChannels = new Set();
 const channelTimers = {};
-const HOT_THRESHOLD = 2; // Testing threshold (will change to 5)
-const HOT_DURATION = 10000; // Testing duration: 10s (will change to 10 mins)
+const HOT_THRESHOLD = 2; // Keep at 2 viewers per user request
+const HOT_DURATION = 30000; // 30 seconds per user request
 
 function checkHotStatus(channelId) {
   if (!channelId) return;
