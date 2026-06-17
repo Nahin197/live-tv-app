@@ -16,8 +16,39 @@ let totalOnline = 0;
 const channelViewers = {}; // { 'channel-id': count }
 const channelPlaying = {}; // { 'channel-id': count } (Strictly for HOT status)
 
+const fs = require('fs');
+
 // -- Hot Channel System --
+const HOT_DATA_FILE = path.join(__dirname, 'hot_channels.json');
+let hotChannelsData = {};
+
+try {
+  if (fs.existsSync(HOT_DATA_FILE)) {
+    hotChannelsData = JSON.parse(fs.readFileSync(HOT_DATA_FILE, 'utf8'));
+  }
+} catch (e) {
+  console.error("Could not load hot channels data", e);
+}
+
 const hotChannels = new Set();
+const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+
+// Cleanup old hot channels on startup
+const now = Date.now();
+for (const [chId, timestamp] of Object.entries(hotChannelsData)) {
+  if (now - timestamp < ONE_DAY_MS) {
+    hotChannels.add(chId);
+  } else {
+    delete hotChannelsData[chId];
+  }
+}
+
+function saveHotChannels() {
+  try {
+    fs.writeFileSync(HOT_DATA_FILE, JSON.stringify(hotChannelsData));
+  } catch(e){}
+}
+
 const channelTimers = {};
 const HOT_THRESHOLD = 2; // Keep at 2 viewers per user request
 const HOT_DURATION = 30000; // 30 seconds per user request
@@ -32,6 +63,8 @@ function checkHotStatus(channelId) {
     if (!channelTimers[channelId]) {
       channelTimers[channelId] = setTimeout(() => {
         hotChannels.add(channelId);
+        hotChannelsData[channelId] = Date.now();
+        saveHotChannels();
         io.emit('hot_update', { channelId, isHot: true });
         delete channelTimers[channelId];
       }, HOT_DURATION);
