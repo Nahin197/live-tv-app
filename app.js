@@ -1412,6 +1412,7 @@ socket.on('initial_hot_channels', (hotIds) => {
     }
   });
   if (changed) {
+    CHANNELS.sort((a, b) => (b.hot ? 1 : 0) - (a.hot ? 1 : 0));
     renderChannelCards();
     renderSidebarChannels();
   }
@@ -1421,6 +1422,7 @@ socket.on('hot_update', (data) => {
   const ch = CHANNELS.find(c => c.id === data.channelId);
   if (ch) {
     ch.hot = data.isHot;
+    CHANNELS.sort((a, b) => (b.hot ? 1 : 0) - (a.hot ? 1 : 0));
     renderChannelCards();
     renderSidebarChannels();
     if (data.isHot) {
