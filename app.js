@@ -442,7 +442,7 @@ async function renderSchedule() {
     // Sort events sequentially
     events.sort((a, b) => new Date(a.date) - new Date(b.date));
 
-    const past = events.filter(e => e.status?.type?.state === 'post');
+    const past = events.filter(e => e.status?.type?.state === 'post').reverse();
     const upcoming = events.filter(e => e.status?.type?.state !== 'post');
 
     let html = '';
