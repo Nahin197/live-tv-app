@@ -10,6 +10,20 @@
 // ────────────────────────────────────────────────────────────
 const CHANNELS = [
   {
+    id: 'rtb-go',
+    name: 'RTB Go live',
+    emoji: '📺',
+    logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxsoXoKYsS_leK30qY252Jsrt0HDnXMRpezWD8TRtZzA&s=10',
+    url: 'https://d1211whpimeups.cloudfront.net/smil:rtbgo/chunklist_b4096000_slENG.m3u8',
+    quality: '1080p',
+    protocol: 'HLS Proxy',
+    color: 'linear-gradient(135deg, rgba(20,20,200,0.15), rgba(10,10,100,0.05))',
+    language: 'English',
+    category: 'Sports',
+    description: 'RTB Go Live Stream',
+    hot: true
+  },
+  {
     id: 'caze-tv',
     name: 'Caze TV',
     emoji: '📺',
@@ -206,19 +220,6 @@ const CHANNELS = [
     description: 'FIFA WM 2026 4K',
   },
   {
-    id: 'rtb-go',
-    name: 'RTB Go live',
-    emoji: '📺',
-    logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxsoXoKYsS_leK30qY252Jsrt0HDnXMRpezWD8TRtZzA&s=10',
-    url: 'https://d1211whpimeups.cloudfront.net/smil:rtbgo/chunklist_b4096000_slENG.m3u8',
-    quality: '1080p',
-    protocol: 'HLS Proxy',
-    color: 'linear-gradient(135deg, rgba(20,20,200,0.15), rgba(10,10,100,0.05))',
-    language: 'English',
-    category: 'Sports',
-    description: 'RTB Go Live Stream',
-  },
-  {
     id: 'dazn-tv',
     name: 'DA ZN tv',
     emoji: '📺',
@@ -313,9 +314,12 @@ function renderChannelCards() {
     card.innerHTML = `
       ${mediaHtml}
       <div class="card-name">${ch.name}</div>
-      <div class="card-live-badge">
-        <span class="card-live-dot"></span>
-        LIVE
+      <div style="display: flex; gap: 8px; align-items: center; justify-content: center; flex-wrap: wrap;">
+        <div class="card-live-badge">
+          <span class="card-live-dot"></span>
+          LIVE
+        </div>
+        ${ch.hot ? '<div class="card-hot-badge">🔥 HOT</div>' : ''}
       </div>
       <div class="card-quality">${ch.quality} · ${ch.language} · ${ch.category}</div>
       <button class="card-watch-btn">▶ Watch Live</button>
@@ -363,7 +367,9 @@ function renderSidebarChannels() {
     item.innerHTML = `
       ${mediaHtml}
       <div>
-        <div class="sidebar-item-name">${ch.name}</div>
+        <div class="sidebar-item-name" style="display: flex; align-items: center; gap: 6px; justify-content: center;">
+          ${ch.name} ${ch.hot ? '<span class="sidebar-hot-icon" title="Hot Channel">🔥</span>' : ''}
+        </div>
         <div class="sidebar-item-quality">${ch.quality} · ${ch.language}</div>
       </div>
     `;
