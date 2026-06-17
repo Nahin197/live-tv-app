@@ -312,21 +312,29 @@ function renderGroupTable(group) {
 
     const logo = team?.logos?.[0]?.href || team?.logo || '';
 
+    return { team, gp, w, d, l, gf, ga, gd, pts, logo };
+  })
+  .sort((a, b) => {
+    if (b.pts !== a.pts) return b.pts - a.pts;
+    if (b.gd !== a.gd) return b.gd - a.gd;
+    return b.gf - a.gf;
+  })
+  .map(p => {
     return `
     <tr class="standings-row">
       <td class="st-team-cell">
         <div class="st-team-inner">
-          ${logo ? `<img src="${logo}" class="st-logo" alt="${team?.displayName}" onerror="this.style.display='none'">` : `<span class="st-flag">${getFlag(team?.abbreviation)}</span>`}
-          <span class="st-name">${team?.shortDisplayName || team?.displayName || '?'}</span>
+          ${p.logo ? `<img src="${p.logo}" class="st-logo" alt="${p.team?.displayName}" onerror="this.style.display='none'">` : `<span class="st-flag">${getFlag(p.team?.abbreviation)}</span>`}
+          <span class="st-name">${p.team?.shortDisplayName || p.team?.displayName || '?'}</span>
         </div>
       </td>
-      <td class="st-num">${gp}</td>
-      <td class="st-num">${w}</td>
-      <td class="st-num">${d}</td>
-      <td class="st-num">${l}</td>
-      <td class="st-num">${gf}:${ga}</td>
-      <td class="st-num ${gd > 0 ? 'pos' : gd < 0 ? 'neg' : ''}">${gd > 0 ? '+' : ''}${gd}</td>
-      <td class="st-pts">${pts}</td>
+      <td class="st-num">${p.gp}</td>
+      <td class="st-num">${p.w}</td>
+      <td class="st-num">${p.d}</td>
+      <td class="st-num">${p.l}</td>
+      <td class="st-num">${p.gf}:${p.ga}</td>
+      <td class="st-num ${p.gd > 0 ? 'pos' : p.gd < 0 ? 'neg' : ''}">${p.gd > 0 ? '+' : ''}${p.gd}</td>
+      <td class="st-pts">${p.pts}</td>
     </tr>`;
   }).join('');
 
