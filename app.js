@@ -29,7 +29,7 @@ const CHANNELS = [
     logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzV2mfuaWiI0HdxWZlS5_Q4i7ZOfZnpoy3Gw&s',
     url: 'http://198.195.239.50:8095/tsports/tracks-v1a1/mono.m3u8',
     quality: '480p',
-    protocol: 'HLS',
+    protocol: 'HLS Proxy',
     color: 'linear-gradient(135deg, rgba(200,20,20,0.15), rgba(100,10,10,0.05))',
     language: 'English',
     category: 'Sports',
