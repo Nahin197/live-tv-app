@@ -1238,7 +1238,11 @@ body {
   .nav-links { display: none; }
   .menu-toggle { display: flex; }
   .hero-ball-wrap { display: none; }
-  .channels-grid { grid-template-columns: repeat(2, 1fr); }
+  .channels-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .channel-card { padding: 16px 10px 14px; gap: 8px; }
+  .card-name { font-size: 0.85rem; line-height: 1.3; word-break: break-word; }
+  .card-quality { font-size: 0.65rem; line-height: 1.2; }
+  .card-logo-img { height: 42px; }
   .schedule-grid, .sb-matches-grid { grid-template-columns: 1fr; justify-items: center; }
   .match-card, .match-card2 { width: 100%; max-width: 400px; margin: 0 auto; }
   .hero-content { padding: 40px 20px 60px; }
