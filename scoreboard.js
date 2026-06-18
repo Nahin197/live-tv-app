@@ -72,7 +72,8 @@ function sbSwitchTab(tab) {
 
 // ── API calls (via local proxy) ────────────────────────────────
 async function sbFetch(endpoint) {
-  const res = await fetch(endpoint);
+  const url = endpoint + (endpoint.includes('?') ? '&' : '?') + '_=' + Date.now();
+  const res = await fetch(url);
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return res.json();
 }
@@ -227,7 +228,8 @@ function renderMatchCard(event) {
   let statusHtml = '';
   let statusClass = '';
   if (state === 'in') {
-    const timeStr = period === 2 ? `HT` : (clock ? `${clock}'` : 'LIVE');
+    const isHalftime = status?.name?.includes('HALFTIME');
+    const timeStr = isHalftime ? `HT` : (clock ? `${clock}'` : 'LIVE');
     statusHtml  = `<span class="mc-status live"><span class="mc-live-dot"></span> ${timeStr}</span>`;
     statusClass = 'mc-live';
   } else if (state === 'post') {
@@ -470,7 +472,8 @@ async function updateTicker() {
       const af = getFlag(away.team?.abbreviation);
 
       if (state === 'in') {
-        const t = period === 2 ? 'HT' : (clock ? `${clock}'` : 'LIVE');
+        const isHalftime = e.status?.type?.name?.includes('HALFTIME');
+        const t = isHalftime ? 'HT' : (clock ? `${clock}'` : 'LIVE');
         return `${hf} ${hn} ${hs}–${as_} ${an} ${af} · ${t}`;
       } else if (state === 'post') {
         return `${hf} ${hn} ${hs}–${as_} ${an} ${af} · FT`;
