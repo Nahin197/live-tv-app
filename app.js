@@ -557,6 +557,7 @@ function playChannel(channel) {
   nowPlayingName.textContent = channel.name;
   protocolInfo.textContent = channel.protocol;
   document.getElementById('languageInfo').textContent = channel.language || 'English';
+  document.getElementById('latencyInfo').textContent = '—';
 
   hideAllOverlays();
   showLoading(true);
@@ -754,6 +755,25 @@ function loadWithHLS(url, channel) {
       }
       resolutionInfo.textContent = `${level.height}p`;
       bitrateInfo.textContent = formatBitrate(level.bitrate);
+    }
+  });
+
+  const fragTimers = {};
+  hls.on(Hls.Events.FRAG_LOADING, (event, data) => {
+    if (data && data.frag && data.frag.url) {
+      fragTimers[data.frag.url] = performance.now();
+    }
+  });
+
+  hls.on(Hls.Events.FRAG_LOADED, (event, data) => {
+    if (data && data.frag && data.frag.url && fragTimers[data.frag.url]) {
+      const latency = Math.round(performance.now() - fragTimers[data.frag.url]);
+      document.getElementById('latencyInfo').textContent = `${latency} ms`;
+      delete fragTimers[data.frag.url];
+    } else if (data && data.stats && data.stats.loading) {
+      // Fallback for older HLS.js versions
+      const latency = Math.round(data.stats.loading.end - data.stats.loading.start);
+      if (latency > 0) document.getElementById('latencyInfo').textContent = `${latency} ms`;
     }
   });
 
