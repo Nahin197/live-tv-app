@@ -580,10 +580,9 @@ function playChannel(channel) {
 
   // If it is a raw TS file, we route it through our proxy to avoid CORS
   if (isTS) {
-    // If running on a server that has /proxy, use it. Otherwise fallback to raw url.
-    if (window.location.protocol.startsWith('http')) {
-      url = `/proxy?url=${encodeURIComponent(url)}`;
-    }
+    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    const PROXY_BASE = isLocalhost ? '/proxy?url=' : 'https://tsports.nanobanana197.workers.dev/?url=';
+    url = `${PROXY_BASE}${encodeURIComponent(url)}`;
     loadWithMpegts(url, channel);
   } else if (isHLS) {
     if (Hls.isSupported()) {
@@ -692,9 +691,12 @@ function loadWithHLS(url, channel) {
     class ProxyLoader extends Hls.DefaultConfig.loader {
       load(context, config, callbacks) {
         const originalUrl = context.url;
-        // Route through our backend proxy
-        if (!originalUrl.startsWith('/proxy')) {
-          context.url = `/proxy?url=${encodeURIComponent(originalUrl)}`;
+        const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        const PROXY_BASE = isLocalhost ? '/proxy?url=' : 'https://tsports.nanobanana197.workers.dev/?url=';
+        
+        // Route through our proxy
+        if (!originalUrl.startsWith('/proxy') && !originalUrl.startsWith('https://tsports.nanobanana197.workers.dev')) {
+          context.url = `${PROXY_BASE}${encodeURIComponent(originalUrl)}`;
         }
         
         const originalOnSuccess = callbacks.onSuccess;
