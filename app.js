@@ -629,10 +629,10 @@ function playChannel(channel) {
     url = `${PROXY_BASE}${encodeURIComponent(url)}`;
     loadWithMpegts(url, channel);
   } else if (isHLS) {
-    if (video.canPlayType('application/vnd.apple.mpegurl')) {
-      loadNative(url, channel);
-    } else if (Hls.isSupported()) {
+    if (Hls.isSupported()) {
       loadWithHLS(url, channel);
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      loadNative(url, channel);
     } else {
       showError('HLS is not supported on this browser. Try Chrome or Firefox.');
       return;
@@ -753,16 +753,18 @@ function loadWithHLS(url, channel) {
     }
   });
 
-  hls.on(Hls.Events.FRAG_LOADED, (event, data) => {
-    let latency = 0;
-    if (data?.frag?.stats?.loading) {
-      latency = Math.round(data.frag.stats.loading.end - data.frag.stats.loading.start);
-    } else if (data?.stats?.loading) {
-      latency = Math.round(data.stats.loading.end - data.stats.loading.start);
+  const fragTimers = {};
+  hls.on(Hls.Events.FRAG_LOADING, (event, data) => {
+    if (data?.frag?.sn !== undefined) {
+      fragTimers[data.frag.sn] = performance.now();
     }
-    
-    if (latency > 0) {
-      document.getElementById('latencyInfo').textContent = `${latency} ms`;
+  });
+
+  hls.on(Hls.Events.FRAG_LOADED, (event, data) => {
+    if (data?.frag?.sn !== undefined && fragTimers[data.frag.sn]) {
+      const latency = Math.round(performance.now() - fragTimers[data.frag.sn]);
+      if (latency > 0) document.getElementById('latencyInfo').textContent = `${latency} ms`;
+      delete fragTimers[data.frag.sn];
     }
   });
 
