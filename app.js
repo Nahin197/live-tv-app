@@ -753,22 +753,16 @@ function loadWithHLS(url, channel) {
     }
   });
 
-  const fragTimers = {};
-  hls.on(Hls.Events.FRAG_LOADING, (event, data) => {
-    if (data && data.frag && data.frag.url) {
-      fragTimers[data.frag.url] = performance.now();
-    }
-  });
-
   hls.on(Hls.Events.FRAG_LOADED, (event, data) => {
-    if (data && data.frag && data.frag.url && fragTimers[data.frag.url]) {
-      const latency = Math.round(performance.now() - fragTimers[data.frag.url]);
+    let latency = 0;
+    if (data?.frag?.stats?.loading) {
+      latency = Math.round(data.frag.stats.loading.end - data.frag.stats.loading.start);
+    } else if (data?.stats?.loading) {
+      latency = Math.round(data.stats.loading.end - data.stats.loading.start);
+    }
+    
+    if (latency > 0) {
       document.getElementById('latencyInfo').textContent = `${latency} ms`;
-      delete fragTimers[data.frag.url];
-    } else if (data && data.stats && data.stats.loading) {
-      // Fallback for older HLS.js versions
-      const latency = Math.round(data.stats.loading.end - data.stats.loading.start);
-      if (latency > 0) document.getElementById('latencyInfo').textContent = `${latency} ms`;
     }
   });
 
