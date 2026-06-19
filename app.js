@@ -10,6 +10,19 @@
 // ────────────────────────────────────────────────────────────
 const CHANNELS = [
   {
+    id: 'tvp-sport-lat',
+    name: 'TVP Sport LAT',
+    emoji: '⚽',
+    logo: 'https://yt3.googleusercontent.com/1x_EmGIWYp8Qc9NAAfDT0qEDoNGIW72BBNJoQdRcNYaylvE-Sd6cJ0lEWRwKGPlKNG52g1OBSw=s900-c-k-c0x00ffffff-no-rj',
+    url: 'https://1nyaler.streamhostingcdn.top/stream/89/index.m3u8',
+    quality: '1080p',
+    protocol: 'HLS',
+    color: 'linear-gradient(135deg, rgba(200,20,20,0.15), rgba(100,10,10,0.05))',
+    language: 'Polish',
+    category: 'Sports',
+    description: 'TVP Sport Live Stream',
+  },
+  {
     id: 'rtb-go',
     name: 'RTB Go live',
     emoji: '📺',
