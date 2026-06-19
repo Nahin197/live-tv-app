@@ -158,6 +158,10 @@ async function sbLoadResults() {
         <div class="sb-matches-grid">${evs.map(renderMatchCard).join('')}</div>
       </div>
     `).join('');
+
+    // Lazy load missing scorers for past matches
+    lazyLoadScorers();
+
   } catch (e) {
     container.innerHTML = renderApiError('match results', 'sbLoadResults()');
   }
@@ -197,6 +201,81 @@ function getTimerText(dateString) {
   const ss = Math.floor((diff / 1000) % 60);
   if (dd > 0) return `in ${dd}d ${hh}h ${mm}m`;
   return `in ${hh}h ${mm}m ${ss}s`;
+}
+
+function generateScorersHtml(detailsArray, homeId, awayId) {
+  const homeScorers = [];
+  const awayScorers = [];
+
+  (detailsArray || []).forEach(detail => {
+    if ((detail.scoringPlay || detail.type?.text === 'Goal' || detail.type?.type === 'goal') && detail.participants && detail.participants.length > 0) {
+      // the new summary endpoint has `participants`, scoreboard endpoint has `athletesInvolved`
+      const athlete = detail.participants[0].athlete;
+      const name = athlete.shortName || athlete.displayName || athlete.fullName;
+      const time = detail.clock?.displayValue || '';
+      const og = detail.ownGoal ? ' (OG)' : '';
+      const pk = detail.penaltyKick ? ' (P)' : '';
+      const text = `${name} ${time}${og}${pk}`;
+      
+      if (detail.team?.id === homeId) homeScorers.push(text);
+      else if (detail.team?.id === awayId) awayScorers.push(text);
+    } else if ((detail.scoringPlay || detail.type?.text === 'Goal') && detail.athletesInvolved && detail.athletesInvolved.length > 0) {
+      const athlete = detail.athletesInvolved[0];
+      const name = athlete.shortName || athlete.displayName || athlete.fullName;
+      const time = detail.clock?.displayValue || '';
+      const og = detail.ownGoal ? ' (OG)' : '';
+      const pk = detail.penaltyKick ? ' (P)' : '';
+      const text = `${name} ${time}${og}${pk}`;
+      
+      if (detail.team?.id === homeId) homeScorers.push(text);
+      else if (detail.team?.id === awayId) awayScorers.push(text);
+    }
+  });
+
+  if (homeScorers.length === 0 && awayScorers.length === 0) return '';
+
+  return `
+    <div class="mc-scorers">
+      <div class="mc-scorers-team text-left">${homeScorers.join('<br>')}</div>
+      <div class="mc-scorers-team text-right">${awayScorers.join('<br>')}</div>
+    </div>
+  `;
+}
+
+async function lazyLoadScorers() {
+  const lazyDivs = document.querySelectorAll('.mc-scorers-lazy');
+  if (lazyDivs.length === 0) return;
+
+  for (const div of lazyDivs) {
+    const matchId = div.getAttribute('data-match-id');
+    const homeId = div.getAttribute('data-home-id');
+    const awayId = div.getAttribute('data-away-id');
+    
+    if (!matchId) continue;
+
+    try {
+      // Using the backend summary API route we already have in server.js
+      const data = await sbFetch('/api/match/' + matchId);
+      
+      let details = [];
+      // Look for scoring details in the summary payload
+      if (data.keyEvents) {
+        details = data.keyEvents.filter(e => e.scoringPlay || e.type?.type === 'goal');
+      } else if (data.scoringPlays) {
+        details = data.scoringPlays;
+      }
+
+      if (details.length > 0) {
+        const html = generateScorersHtml(details, homeId, awayId);
+        div.outerHTML = html; // Replace the lazy loader div with the generated HTML
+      } else {
+        div.remove(); // Remove if nothing found
+      }
+    } catch(e) {
+      console.warn('Could not lazy load scorers for match', matchId, e);
+      div.remove();
+    }
+  }
 }
 
 // ── RENDER MATCH CARD ──────────────────────────────────────────
@@ -255,31 +334,13 @@ function renderMatchCard(event) {
   // --- Extract Goal Scorers ---
   const homeId = home.team?.id;
   const awayId = away.team?.id;
-  const homeScorers = [];
-  const awayScorers = [];
-
-  (competition.details || []).forEach(detail => {
-    if ((detail.scoringPlay || detail.type?.text === 'Goal') && detail.athletesInvolved && detail.athletesInvolved.length > 0) {
-      const athlete = detail.athletesInvolved[0];
-      const name = athlete.shortName || athlete.displayName || athlete.fullName;
-      const time = detail.clock?.displayValue || '';
-      const og = detail.ownGoal ? ' (OG)' : '';
-      const pk = detail.penaltyKick ? ' (P)' : '';
-      const text = `${name} ${time}${og}${pk}`;
-      
-      if (detail.team?.id === homeId) homeScorers.push(text);
-      else if (detail.team?.id === awayId) awayScorers.push(text);
-    }
-  });
-
   let scorersHtml = '';
-  if (homeScorers.length > 0 || awayScorers.length > 0) {
-    scorersHtml = `
-      <div class="mc-scorers">
-        <div class="mc-scorers-team text-left">${homeScorers.join('<br>')}</div>
-        <div class="mc-scorers-team text-right">${awayScorers.join('<br>')}</div>
-      </div>
-    `;
+
+  if (competition.details && competition.details.length > 0) {
+    scorersHtml = generateScorersHtml(competition.details, homeId, awayId);
+  } else if ((state === 'post' || state === 'in') && (parseInt(homeScore) > 0 || parseInt(awayScore) > 0)) {
+    // If no details are available yet but goals were scored, setup lazy loading
+    scorersHtml = `<div class="mc-scorers-lazy" data-match-id="${event.id}" data-home-id="${homeId}" data-away-id="${awayId}"></div>`;
   }
 
   // --- Extract Broadcasters / Commentators ---
