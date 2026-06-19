@@ -104,7 +104,7 @@ const CHANNELS = [
     name: 'TSN Sports',
     emoji: '🍁',
     logo: 'https://iconlogovector.com/uploads/images/2025/03/lg-67d80052de144-TSN.webp',
-    url: 'https://fa723fc1b171.aps31.playlist.live-video.net/v1/playlist/CrsFZ9fyBW-vKDzEsdl8wt31bKFo1TU8fFE2kR75XAj3jN4oul0vxOhusI0gbb6ltmfqj6v9P9tYnM8hoD0l3--O49-MR8GUYFgqMVXHnLVuIN9xtPIi0y2dXaAPZ_gmD4vhv7lyjJ49DeKdpx2bneEB_PzuXSMf-gH6ZXD0n8WKFCR-Hn2iGDIQbClzrPuDDy4L1q6IkJPgUXIo3MrT2CaZeQwh6olWaCdL7LLzCRj-7X-AYtepv0Ms0Nu-7fpYPQxjt20Rosi9NfYIJ6oDcr2A7YTE-9ok5UBseCvBCnKdaI6pAQ--PprG604dpgrsQ2-K680R69ZLHaU1avfh7fGWP8rFp0oQMoE0_hx2VCQjMRM6aDopvBu3XEg5QguZlQOwvWSzGzCDVld03UkFG6dIyYd6LXEJjCgHuNgCsWMGwnbkU-3FAS1J7OZI9F6t5pWzQ9re6sgrJXz05EbJ_kLCKmGChlR5yMgHE6GOiVoIN3yoJP_GUtLxqcKIIdhZnbgnA41FvzWViHBNi_Z3mN0vtCXyvfuRwY4bm8LctFA-Jfs4s10HeRzz-Z3XvY-hsMCF5tAAR9aNWVSkhfjmyFucYJ1wA8Wrg4h9PbT6s3g2GrLVmKVjZE47E7kjRTzq0Rsd62hUxCcfceOPoPS30C9-GCIHBK_bwHU9zFluPdsff1No6xyYvqR_O_hxCl5oMVokUdTKPUH8-1spVwaLkO2ZD9Bu2WbKEGG0a5blIAejXUX6znorkKMG6ANjRauVWVbMw4_996OuF7HS5JsgJEy4EU5f8_ZgSUABJwGO5dQi2NQQQxBGHPMAhpZvxNbnxScTSqeDc3xTe0tGvnSUrYuXoUXdmOMhAv2SLZMbVNVWh5Rm-w47VOwYZJfC1-1aw935FLMOcKWQx7HGytKefFu8Rbyupw8vkY9QI2A_GgzOF2FAiXVIZEI4jTsgASoJdXMtd2VzdC0yMLQP.m3u8',
+    url: 'http://str2.v3v3v.xyz:2082/live/rokhsi25_951396/POm6KqnW/12350.m3u8',
     quality: 'HD HLS',
     protocol: 'HLS',
     color: 'linear-gradient(135deg, rgba(230,0,0,0.15), rgba(255,100,100,0.05))',
