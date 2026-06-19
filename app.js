@@ -39,7 +39,7 @@ const CHANNELS = [
     id: 'telemundo',
     name: 'Telemundo',
     emoji: '📺',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/e/ec/Telemundo_logo.png',
+    logo: 'https://i.pinimg.com/736x/9c/60/52/9c60522c8605b531d55f5fd7975f9de3.jpg',
     url: 'https://nbculocallive.akamaized.net/hls/live/2037499/puertorico/stream1/master_1080.m3u8',
     quality: '1080p',
     protocol: 'HLS Proxy',
