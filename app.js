@@ -53,7 +53,7 @@ const CHANNELS = [
     name: 'Caze TV',
     emoji: '📺',
     logo: 'https://images.seeklogo.com/logo-png/61/2/cazetv-logo-png_seeklogo-619708.png',
-    url: 'https://dfr80qz435crc.cloudfront.net/MNOP/Amagi/Caze/Caze_TV_BR/Caze_TV.m3u8',
+    url: 'https://dfr80qz435crc.cloudfront.net/MNOP/Amagi/Caze/Caze_TV_BR/1080p-vtt/index.m3u8',
     quality: '1080p HLS',
     protocol: 'HLS',
     color: 'linear-gradient(135deg, rgba(79,172,254,0.15), rgba(0,242,254,0.05))',
@@ -629,10 +629,10 @@ function playChannel(channel) {
     url = `${PROXY_BASE}${encodeURIComponent(url)}`;
     loadWithMpegts(url, channel);
   } else if (isHLS) {
-    if (Hls.isSupported()) {
-      loadWithHLS(url, channel);
-    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+    if (video.canPlayType('application/vnd.apple.mpegurl')) {
       loadNative(url, channel);
+    } else if (Hls.isSupported()) {
+      loadWithHLS(url, channel);
     } else {
       showError('HLS is not supported on this browser. Try Chrome or Firefox.');
       return;
@@ -693,26 +693,6 @@ function handleMpegtsError(errorType, channel) {
     showError('Network error: The stream could not be reached or CORS was blocked.');
   }
 }
-
-// Check if a codec string contains HEVC/H.265 (not supported in Chrome/Firefox)
-function isHEVCCodec(codecStr) {
-  if (!codecStr) return false;
-  return codecStr.toLowerCase().includes('hvc1') ||
-    codecStr.toLowerCase().includes('hev1') ||
-    codecStr.toLowerCase().includes('dvh1') ||
-    codecStr.toLowerCase().includes('dvhe');
-}
-
-// Find the best H.264 level index (-1 if none found)
-function findBestH264Level(levels) {
-  // Sort by bitrate descending so we pick the best quality first
-  const h264Levels = levels
-    .map((l, idx) => ({ l, idx }))
-    .filter(({ l }) => !isHEVCCodec(l.videoCodec))
-    .sort((a, b) => (b.l.bitrate || 0) - (a.l.bitrate || 0));
-  return h264Levels.length ? h264Levels[0].idx : -1;
-}
-
 function loadWithHLS(url, channel) {
   const hlsConfig = {
     enableWorker: true,
@@ -767,38 +747,19 @@ function loadWithHLS(url, channel) {
   hls.on(Hls.Events.MANIFEST_PARSED, (event, data) => {
     const levels = data.levels;
 
-    // --- Codec Check: skip HEVC-only streams ---
-    const allHEVC = levels.length > 0 && levels.every(l => isHEVCCodec(l.videoCodec));
-    const bestH264 = findBestH264Level(levels);
-
-    if (allHEVC) {
-      // All levels are HEVC — browser will show black screen
-      // Show a codec warning banner but still try to play (audio will work)
-      showCodecWarning();
-      connectionStatus.textContent = 'HEVC ⚠';
-    } else if (bestH264 >= 0 && bestH264 !== hls.currentLevel) {
-      // Force switch to best H.264 level to avoid black screen
-      hls.currentLevel = bestH264;
-    }
-
     showLoading(false);
     showControls(true);
     updateQualityLevels(levels);
     video.play().catch(() => { });
-    connectionStatus.textContent = allHEVC ? 'HEVC ⚠' : 'Connected ✓';
+    connectionStatus.textContent = 'Connected ✓';
     resolutionInfo.textContent = levels.length ? getMaxResolution(levels) : channel.quality;
     bitrateInfo.textContent = levels.length ? formatBitrate(levels[0].bitrate) : '—';
-    if (!allHEVC) showToast(`✅ Now watching ${channel.name}`, 'success');
+    showToast(`✅ Now watching ${channel.name}`, 'success');
   });
 
   hls.on(Hls.Events.LEVEL_SWITCHED, (event, data) => {
     const level = hls.levels[data.level];
     if (level) {
-      // If we accidentally switched to an HEVC level, switch back
-      if (isHEVCCodec(level.videoCodec)) {
-        const alt = findBestH264Level(hls.levels);
-        if (alt >= 0) { hls.currentLevel = alt; return; }
-      }
       resolutionInfo.textContent = `${level.height}p`;
       bitrateInfo.textContent = formatBitrate(level.bitrate);
     }
