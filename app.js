@@ -694,19 +694,7 @@ function handleMpegtsError(errorType, channel) {
   }
 }
 function loadWithHLS(url, channel) {
-  const hlsConfig = {
-    enableWorker: true,
-    lowLatencyMode: true,
-    backBufferLength: 60,
-    maxBufferLength: 30,
-    maxMaxBufferLength: 60,
-    // Prefer H.264 over HEVC by filtering at startup
-    startLevel: -1,
-    autoStartLoad: true,
-    xhrSetup(xhr) {
-      xhr.withCredentials = false;
-    },
-  };
+  const hlsConfig = {};
 
   // If protocol asks for proxy, or it's mixed content (HTTP stream on HTTPS site)
   const needsProxy = channel.protocol === 'HLS Proxy' || (window.location.protocol === 'https:' && url.startsWith('http:'));
