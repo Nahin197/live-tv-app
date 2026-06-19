@@ -436,6 +436,18 @@ function renderApiMatchCard(event) {
   const flagHome = typeof getFlag !== 'undefined' ? getFlag(homeAbbr) : '⚽';
   const flagAway = typeof getFlag !== 'undefined' ? getFlag(awayAbbr) : '⚽';
 
+  const homeId = home.team?.id;
+  const awayId = away.team?.id;
+  let scorersHtml = '';
+
+  if (typeof generateScorersHtml !== 'undefined') {
+    if (competition.details && competition.details.length > 0) {
+      scorersHtml = generateScorersHtml(competition.details, homeId, awayId);
+    } else if ((state === 'post' || state === 'in') && (parseInt(scoreH) > 0 || parseInt(scoreA) > 0)) {
+      scorersHtml = `<div class="mc-scorers-lazy" data-match-id="${event.id}" data-home-id="${homeId}" data-away-id="${awayId}"></div>`;
+    }
+  }
+
   return `
     <div class="match-card">
       <div class="match-status ${statusClass}">${statusLabel}</div>
@@ -450,6 +462,7 @@ function renderApiMatchCard(event) {
           <div class="team-name">${awayName}</div>
         </div>
       </div>
+      ${scorersHtml}
       <div class="match-meta">
         <span class="match-group">${competition?.notes?.[0]?.headline || groupName}</span>
         <span class="match-datetime">${dateStr}</span>
@@ -516,6 +529,11 @@ async function renderSchedule() {
 
     grid.innerHTML = html || '<p style="grid-column: 1 / -1; text-align: center; color: rgba(255,255,255,0.5);">No matches scheduled yet.</p>';
 
+    // Lazy load scorers if the function from scoreboard.js is available
+    if (typeof lazyLoadScorers !== 'undefined') {
+      setTimeout(lazyLoadScorers, 100);
+    }
+
     // Initialize Hero Timer with the next scheduled match
     const nextPreMatch = upcoming.find(e => e.status?.type?.state === 'pre');
     if (nextPreMatch && typeof initTimer === 'function') {
@@ -533,9 +551,9 @@ async function renderSchedule() {
         date: nextPreMatch.date
       });
     }
-  } catch (err) {
-    console.error('Schedule fetch error:', err);
-    grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: var(--red); padding: 40px;">Failed to load tournament calendar from API.</div>';
+  } catch (error) {
+    console.error('Schedule fetch error:', error);
+    grid.innerHTML = '<div style="grid-column: 1 / -1; text-align:center; padding: 20px; color:rgba(255,255,255,0.5);">Failed to load schedule. Using fallback...</div>';
   }
 }
 
