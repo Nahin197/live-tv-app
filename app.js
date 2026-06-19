@@ -36,6 +36,19 @@ const CHANNELS = [
     description: 'Toffee Live Stream'
   },
   {
+    id: 'telemundo',
+    name: 'Telemundo',
+    emoji: '📺',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/e/ec/Telemundo_logo.png',
+    url: 'https://nbculocallive.akamaized.net/hls/live/2037499/puertorico/stream1/master_1080.m3u8',
+    quality: '1080p',
+    protocol: 'HLS Proxy',
+    color: 'linear-gradient(135deg, rgba(220,38,38,0.15), rgba(239,68,68,0.05))',
+    language: 'Spanish',
+    category: 'Sports',
+    description: 'Telemundo Live Stream'
+  },
+  {
     id: 'caze-tv',
     name: 'Caze TV',
     emoji: '📺',
