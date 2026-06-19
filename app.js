@@ -761,10 +761,22 @@ function loadWithHLS(url, channel) {
   });
 
   hls.on(Hls.Events.FRAG_LOADED, (event, data) => {
+    let metrics = [];
+    
+    // Broadcast Latency (Seconds behind live edge)
+    if (hls.latency) {
+      metrics.push(`Delay: ${Math.round(hls.latency)}s`);
+    }
+    
+    // Network Latency (Ping in ms)
     if (data?.frag?.sn !== undefined && fragTimers[data.frag.sn]) {
-      const latency = Math.round(performance.now() - fragTimers[data.frag.sn]);
-      if (latency > 0) document.getElementById('latencyInfo').textContent = `${latency} ms`;
+      const ping = Math.round(performance.now() - fragTimers[data.frag.sn]);
+      if (ping > 0) metrics.push(`Ping: ${ping}ms`);
       delete fragTimers[data.frag.sn];
+    }
+    
+    if (metrics.length > 0) {
+      document.getElementById('latencyInfo').textContent = metrics.join(' | ');
     }
   });
 
