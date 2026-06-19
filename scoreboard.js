@@ -252,6 +252,44 @@ function renderMatchCard(event) {
     timerCorner = `<div class="card-timer" data-datetime="${event.date}" style="margin: 0; display: inline-block;">${getTimerText(event.date)}</div>`;
   }
 
+  // --- Extract Goal Scorers ---
+  const homeId = home.team?.id;
+  const awayId = away.team?.id;
+  const homeScorers = [];
+  const awayScorers = [];
+
+  (competition.details || []).forEach(detail => {
+    if ((detail.scoringPlay || detail.type?.text === 'Goal') && detail.athletesInvolved && detail.athletesInvolved.length > 0) {
+      const athlete = detail.athletesInvolved[0];
+      const name = athlete.shortName || athlete.displayName || athlete.fullName;
+      const time = detail.clock?.displayValue || '';
+      const og = detail.ownGoal ? ' (OG)' : '';
+      const pk = detail.penaltyKick ? ' (P)' : '';
+      const text = `${name} ${time}${og}${pk}`;
+      
+      if (detail.team?.id === homeId) homeScorers.push(text);
+      else if (detail.team?.id === awayId) awayScorers.push(text);
+    }
+  });
+
+  let scorersHtml = '';
+  if (homeScorers.length > 0 || awayScorers.length > 0) {
+    scorersHtml = `
+      <div class="mc-scorers">
+        <div class="mc-scorers-team text-left">${homeScorers.join('<br>')}</div>
+        <div class="mc-scorers-team text-right">${awayScorers.join('<br>')}</div>
+      </div>
+    `;
+  }
+
+  // --- Extract Broadcasters / Commentators ---
+  const broadcastNames = (competition.broadcasts || []).map(b => b.names?.join(', ')).filter(Boolean).join(' | ');
+  let broadcasterHtml = '';
+  if (broadcastNames) {
+    // Basic fallback for commentators based on network, or just display the network
+    broadcasterHtml = `<div class="mc-broadcaster">🎙️ TV: ${broadcastNames}</div>`;
+  }
+
   return `
   <div class="match-card2 ${statusClass}">
     <div class="mc-header">
@@ -287,7 +325,9 @@ function renderMatchCard(event) {
         ${awayWin ? '<div class="mc-winner-tag">🏆 Winner</div>' : ''}
       </div>
     </div>
+    ${scorersHtml}
     ${venue ? `<div class="mc-venue">📍 ${venue}</div>` : ''}
+    ${broadcasterHtml}
   </div>`;
 }
 

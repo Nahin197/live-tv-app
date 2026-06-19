@@ -1855,3 +1855,31 @@ body {
 .player-controls, .video-topbar {
   transition: opacity 0.4s ease, transform 0.3s ease;
 }
+
+/* ---------- SCORERS & BROADCASTER ---------- */
+.mc-scorers {
+  display: flex;
+  justify-content: space-between;
+  margin: 12px 16px 0;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.4;
+}
+.mc-scorers-team {
+  flex: 1;
+}
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.mc-broadcaster {
+  margin: 12px 16px 12px;
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.85);
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
