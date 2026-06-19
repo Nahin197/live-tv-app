@@ -283,12 +283,8 @@ function renderMatchCard(event) {
   }
 
   // --- Extract Broadcasters / Commentators ---
-  const broadcastNames = (competition.broadcasts || []).map(b => b.names?.join(', ')).filter(Boolean).join(' | ');
+  // User requested to remove TV network broadcasters. Commentators are not available in the API.
   let broadcasterHtml = '';
-  if (broadcastNames) {
-    // Basic fallback for commentators based on network, or just display the network
-    broadcasterHtml = `<div class="mc-broadcaster">🎙️ TV: ${broadcastNames}</div>`;
-  }
 
   return `
   <div class="match-card2 ${statusClass}">
