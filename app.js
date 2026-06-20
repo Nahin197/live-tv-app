@@ -746,8 +746,14 @@ function handleMpegtsError(errorType, channel) {
   }
 }
 function loadWithHLS(url, channel) {
-  const hlsConfig = {};
-
+  const hlsConfig = {
+    enableWorker: true,
+    lowLatencyMode: true,
+    liveSyncDurationCount: 3,
+    liveMaxLatencyDurationCount: 10,
+    maxLiveSyncPlaybackRate: 1.5,
+    startFragPrefetch: true
+  };
   // If protocol asks for proxy, or it's mixed content (HTTP stream on HTTPS site)
   const needsProxy = channel.protocol === 'HLS Proxy' || (window.location.protocol === 'https:' && url.startsWith('http:'));
 
@@ -1188,7 +1194,14 @@ function openMiniPlayer() {
 
   // Share the same MediaSource by re-attaching HLS or mpegts to the mini video
   if (hlsInstance) {
-    const miniHls = new Hls({ startLevel: hlsInstance.currentLevel });
+    const miniHls = new Hls({ 
+      startLevel: hlsInstance.currentLevel,
+      enableWorker: true,
+      lowLatencyMode: true,
+      liveSyncDurationCount: 3,
+      liveMaxLatencyDurationCount: 10,
+      startFragPrefetch: true
+    });
     miniHls.loadSource(currentChannel.url);
     miniHls.attachMedia(miniVideo);
     miniVideo._miniHls = miniHls;
