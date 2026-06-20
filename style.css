@@ -851,40 +851,56 @@ body {
 
 .video-container:not(:hover) .player-controls { opacity: 0; }
 
-.progress-wrap {
-  position: relative;
+.live-sync-container {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+  padding-right: 10px;
 }
 
-.progress-track {
-  flex: 1;
-  height: 3px;
-  background: rgba(255,255,255,0.15);
-  border-radius: 3px;
-  cursor: pointer;
-  transition: height var(--trans-fast);
-}
-.progress-wrap:hover .progress-track { height: 5px; }
-
-.progress-fill {
-  height: 100%;
-  background: var(--grad-gold);
-  border-radius: 3px;
-  width: 100%;
-}
-
-.live-badge-ctrl {
-  flex-shrink: 0;
-  background: var(--red);
+.live-sync-btn {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255,255,255,0.1);
   color: #fff;
-  font-size: 0.62rem;
+  border-radius: 20px;
+  padding: 4px 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all var(--trans-fast);
+}
+
+.live-sync-btn:hover {
+  background: rgba(0, 0, 0, 0.7);
+  transform: scale(1.05);
+}
+
+.live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #666;
+  transition: all 0.3s;
+}
+
+.live-text {
+  font-size: 0.65rem;
   font-weight: 800;
-  padding: 2px 8px;
-  border-radius: 4px;
   letter-spacing: 1px;
+  color: #ccc;
+  transition: all 0.3s;
+}
+
+/* Synced State */
+.live-sync-btn.synced .live-dot {
+  background: var(--red);
+  box-shadow: 0 0 6px var(--red);
+}
+
+.live-sync-btn.synced .live-text {
+  color: #fff;
 }
 
 .ctrl-row {

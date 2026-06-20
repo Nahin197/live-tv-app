@@ -1,0 +1,1 @@
+fetch('https://fifatv.qzz.io/search').then(r=>r.text()).then(t=>{ const matches = t.match(/<script.*?src=[\'"](.*?)[\'"].*?>/g); if(matches) matches.forEach(m => console.log(m)) }).catch(e=>console.error(e));

@@ -221,11 +221,10 @@
 
           <!-- Custom Controls -->
           <div class="player-controls" id="customControls" style="display:none">
-            <div class="progress-wrap">
-              <div class="progress-track">
-                <div class="progress-fill" id="progressBar"></div>
-              </div>
-              <span class="live-badge-ctrl">● LIVE</span>
+            <div class="live-sync-container">
+              <button class="live-sync-btn synced" id="liveSyncBtn" onclick="syncToLiveEdge()" title="Sync to Live Edge">
+                <span class="live-dot"></span><span class="live-text">LIVE</span>
+              </button>
             </div>
             <div class="ctrl-row">
               <div class="ctrl-left">

@@ -1628,3 +1628,28 @@ function initTimer(nextMatch) {
   if (window.appTimerInterval) clearInterval(window.appTimerInterval);
   window.appTimerInterval = setInterval(updateTimer, 1000);
 }
+
+// --- Live Sync Logic ---
+function syncToLiveEdge() {
+  if (video.seekable && video.seekable.length > 0) {
+    const liveEdge = video.seekable.end(video.seekable.length - 1);
+    // Seek to the live edge minus a tiny 2 second buffer to ensure smooth playback
+    video.currentTime = Math.max(0, liveEdge - 2);
+  }
+}
+
+video.addEventListener('timeupdate', () => {
+  const liveSyncBtn = document.getElementById('liveSyncBtn');
+  if (!liveSyncBtn) return;
+  
+  if (video.seekable && video.seekable.length > 0) {
+    const liveEdge = video.seekable.end(video.seekable.length - 1);
+    
+    // If the user is within 10 seconds of the live edge, the indicator glows red
+    if (liveEdge - video.currentTime <= 10) {
+      liveSyncBtn.classList.add('synced');
+    } else {
+      liveSyncBtn.classList.remove('synced');
+    }
+  }
+});
