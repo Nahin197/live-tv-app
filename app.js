@@ -10,6 +10,19 @@
 // ────────────────────────────────────────────────────────────
 const CHANNELS = [
   {
+    id: 'tnt-sport-premium',
+    name: 'TNT SPORT PREMIUM',
+    emoji: '⚽',
+    logo: 'https://images.seeklogo.com/logo-png/48/1/tnt-sports-logo-png_seeklogo-486966.png',
+    url: 'https://1nyaler.streamhostingcdn.top/stream/30/index.m3u8',
+    quality: '1080p',
+    protocol: 'HLS',
+    color: 'linear-gradient(135deg, rgba(230,0,0,0.15), rgba(255,100,100,0.05))',
+    language: 'Spanish',
+    category: 'Sports',
+    description: 'TNT SPORT PREMIUM Live'
+  },
+  {
     id: 'tvp-sport-lat',
     name: 'TVP Sport LAT',
     emoji: '⚽',
