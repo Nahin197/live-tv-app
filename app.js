@@ -49,6 +49,19 @@ const CHANNELS = [
     description: 'RTB Go Live Stream'
   },
   {
+    id: 'rtb-go-2',
+    name: 'RTB Go live 2',
+    emoji: '📺',
+    logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxsoXoKYsS_leK30qY252Jsrt0HDnXMRpezWD8TRtZzA&s=10',
+    url: 'https://d1211whpimeups.cloudfront.net/smil:rtbgo/chunklist_b2196000_sleng.m3u8',
+    quality: '1080p',
+    protocol: 'HLS Proxy',
+    color: 'linear-gradient(135deg, rgba(20,20,200,0.15), rgba(10,10,100,0.05))',
+    language: 'English',
+    category: 'Sports',
+    description: 'RTB Go Live 2 Stream'
+  },
+  {
     id: "toffee",
     name: "Toffee",
     emoji: '📺',
