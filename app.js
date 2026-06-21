@@ -156,7 +156,7 @@ const CHANNELS = [
     name: 'TSN Sports',
     emoji: '🍁',
     logo: 'https://iconlogovector.com/uploads/images/2025/03/lg-67d80052de144-TSN.webp',
-    url: 'https://ataide0.nawapholengineering.co.th/tsn.m3u8',
+    url: 'https://ataide0.sman1asjap.my.id/tsn.m3u8',
     quality: '1080p',
     protocol: 'HLS',
     color: 'linear-gradient(135deg, rgba(230,0,0,0.15), rgba(255,100,100,0.05))',
