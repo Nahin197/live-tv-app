@@ -9,7 +9,19 @@
 // CHANNEL DATA
 // ────────────────────────────────────────────────────────────
 const CHANNELS = [
-
+  {
+    id: 'unite-8-sports',
+    name: 'Unite 8 Sports',
+    emoji: '📺',
+    logo: 'https://exchange4media.gumlet.io/news-photo/155155-Z1.jpg',
+    url: 'http://212.102.34.8:9080/AndFlixHD/tracks-v1a1/mono.m3u8',
+    quality: '1080p',
+    protocol: 'HLS Proxy',
+    color: 'linear-gradient(135deg, rgba(200,20,20,0.15), rgba(100,10,10,0.05))',
+    language: 'English',
+    category: 'Sports',
+    description: 'Unite 8 Sports Live Stream'
+  },
   {
     id: 'tvp-sport-lat',
     name: 'TVP Sport LAT',
