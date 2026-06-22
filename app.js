@@ -10,6 +10,19 @@
 // ────────────────────────────────────────────────────────────
 const CHANNELS = [
   {
+    id: 'fox-fs1',
+    name: 'Fox FS1',
+    emoji: '📺',
+    logo: 'https://statics.foxsports.com/www.foxsports.com/content/uploads/2026/05/fox-world-cup-2026.jpg',
+    url: 'https://vizio.kuvuslov.cymru/fs1/tracks-v1a1/mono.m3u8',
+    quality: '1080p',
+    protocol: 'HLS',
+    color: 'linear-gradient(135deg, rgba(200,20,20,0.15), rgba(100,10,10,0.05))',
+    language: 'English',
+    category: 'Sports',
+    description: 'Fox FS1 Live Stream'
+  },
+  {
     id: 'unite-8-sports',
     name: 'Unite 8 Sports',
     emoji: '📺',
