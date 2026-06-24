@@ -708,6 +708,18 @@ function playChannel(channel) {
   document.getElementById('languageInfo').textContent = channel.language || 'English';
   document.getElementById('latencyInfo').textContent = '—';
 
+  const hotArea = document.getElementById('hotActionArea');
+  const hotBtn = document.getElementById('markHotBtn');
+  if (hotArea && hotBtn) {
+    if (channel.hot) {
+      hotArea.style.display = 'none';
+    } else {
+      hotArea.style.display = 'flex';
+      hotBtn.disabled = false;
+      hotBtn.innerHTML = '<span class="btn-icon">🔥</span> Mark As Hot';
+    }
+  }
+
   hideAllOverlays();
   showLoading(true);
 
@@ -1706,3 +1718,29 @@ video.addEventListener('timeupdate', () => {
     }
   }
 });
+
+// --- Manual Hot Action ---
+window.markCurrentChannelHot = function() {
+  if (!currentChannel) return;
+
+  const hotBtn = document.getElementById('markHotBtn');
+  if (hotBtn) {
+    hotBtn.disabled = true;
+    hotBtn.innerHTML = '<span class="btn-icon">✅</span> Marked as Hot!';
+  }
+
+  // Emitting the event to the server to bump the channel
+  socket.emit('manual_hot', currentChannel.id);
+
+  // Optimistically mark it locally
+  currentChannel.hot = true;
+  CHANNELS.sort((a, b) => (b.hot ? 1 : 0) - (a.hot ? 1 : 0));
+  renderChannelCards();
+  renderSidebarChannels();
+
+  // Keep the current channel highlighted
+  const card = document.getElementById(`card-${currentChannel.id}`);
+  const sidebar = document.getElementById(`sidebar-${currentChannel.id}`);
+  if (card) card.classList.add('active');
+  if (sidebar) sidebar.classList.add('active');
+};

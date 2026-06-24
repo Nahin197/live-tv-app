@@ -132,6 +132,14 @@ io.on('connection', (socket) => {
     }
   });
 
+  socket.on('manual_hot', (channelId) => {
+    if (!channelId || hotChannels.has(channelId)) return;
+    hotChannels.add(channelId);
+    hotChannelsData[channelId] = Date.now();
+    saveHotChannels();
+    io.emit('hot_update', { channelId, isHot: true });
+  });
+
   socket.on('disconnect', () => {
     totalOnline = Math.max(0, totalOnline - 1);
     io.emit('viewer_update', { type: 'total', count: totalOnline });

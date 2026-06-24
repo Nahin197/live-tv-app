@@ -1899,3 +1899,43 @@ body {
   text-align: center;
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
+
+/* Hot Action Area */
+.hot-action-area {
+  margin-top: 16px;
+  padding: 20px;
+  background: rgba(240, 181, 24, 0.08);
+  border: 1px solid rgba(240, 181, 24, 0.2);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.hot-action-text {
+  flex: 1;
+}
+.hot-action-title {
+  font-weight: 600;
+  font-size: 1.15rem;
+  color: #F0B518;
+  margin-bottom: 6px;
+}
+.hot-action-desc {
+  font-size: 0.9rem;
+  color: #ccc;
+  line-height: 1.4;
+}
+.hot-action-desc strong {
+  color: #fff;
+}
+@media (max-width: 768px) {
+  .hot-action-area {
+    flex-direction: column;
+    text-align: center;
+  }
+  .hot-action-area .btn-gold {
+    width: 100%;
+  }
+}
+
