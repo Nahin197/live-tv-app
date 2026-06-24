@@ -10,6 +10,19 @@
 // ────────────────────────────────────────────────────────────
 const CHANNELS = [
   {
+    id: 'unknown-fifalive',
+    name: 'Unknown channel',
+    emoji: '📺',
+    logo: 'https://statics.foxsports.com/www.foxsports.com/content/uploads/2026/05/fox-world-cup-2026.jpg', /* using a fallback logo since none was provided */
+    url: 'https://cdn.fifalive.click/play.m3u8',
+    quality: 'HD',
+    protocol: 'HLS Proxy',
+    color: 'linear-gradient(135deg, rgba(200,20,20,0.15), rgba(100,10,10,0.05))',
+    language: 'English',
+    category: 'Sports',
+    description: 'Unknown channel Live Stream'
+  },
+  {
     id: 't-sports',
     name: 'T Sports',
     emoji: '📺',

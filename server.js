@@ -180,8 +180,15 @@ app.use('/proxy', (req, res, next) => {
     changeOrigin: true,
     pathRewrite: () => target.pathname + target.search,
     onProxyReq: (proxyReq, req, res) => {
-      // Spoof User-Agent to bypass blocks on IPTV streams
+      // Spoof User-Agent, Origin, and Referer to bypass blocks on IPTV streams
       proxyReq.setHeader('User-Agent', 'Mozilla/5.0');
+      // Set the Origin and Referer to the target domain, unless it's an exceptional case that requires something else
+      let spoofOrigin = target.origin;
+      if (target.hostname.includes('fifalive.click')) {
+        spoofOrigin = 'https://fifalive.click'; // just to be exactly sure
+      }
+      proxyReq.setHeader('Origin', spoofOrigin);
+      proxyReq.setHeader('Referer', spoofOrigin + '/');
     },
     onProxyRes: (proxyRes, req, res) => {
       // Add CORS headers to the response
