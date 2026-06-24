@@ -10,6 +10,19 @@
 // ────────────────────────────────────────────────────────────
 const CHANNELS = [
   {
+    id: 't-sports',
+    name: 'T Sports',
+    emoji: '📺',
+    logo: 'https://freekaj.com/assets/images/stock/image/2024/01/14/thumb_65a43e21ef5f41705262625.jpg',
+    url: 'https://trs1.aynaott.com/tsports/tracks-v1a1/mono.ts.m3u8?nocache=1782326741670',
+    quality: '720p',
+    protocol: 'HLS',
+    color: 'linear-gradient(135deg, rgba(200,20,20,0.15), rgba(100,10,10,0.05))',
+    language: 'English',
+    category: 'Sports',
+    description: 'T Sports Live Stream'
+  },
+  {
     id: 'fox-fs1',
     name: 'Fox FS1',
     emoji: '📺',
