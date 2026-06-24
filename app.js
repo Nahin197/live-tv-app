@@ -10,19 +10,6 @@
 // ────────────────────────────────────────────────────────────
 const CHANNELS = [
   {
-    id: 'unknown-fifalive',
-    name: 'Unknown channel',
-    emoji: '📺',
-    logo: 'https://statics.foxsports.com/www.foxsports.com/content/uploads/2026/05/fox-world-cup-2026.jpg', /* using a fallback logo since none was provided */
-    url: 'https://cdn.fifalive.click/play.m3u8',
-    quality: 'HD',
-    protocol: 'HLS Proxy',
-    color: 'linear-gradient(135deg, rgba(200,20,20,0.15), rgba(100,10,10,0.05))',
-    language: 'English',
-    category: 'Sports',
-    description: 'Unknown channel Live Stream'
-  },
-  {
     id: 't-sports',
     name: 'T Sports',
     emoji: '📺',
@@ -40,9 +27,9 @@ const CHANNELS = [
     name: 'Fox FS1',
     emoji: '📺',
     logo: 'https://statics.foxsports.com/www.foxsports.com/content/uploads/2026/05/fox-world-cup-2026.jpg',
-    url: 'https://vizio.kuvuslov.cymru/fs1/tracks-v1a1/mono.m3u8',
+    url: 'https://inproviszon.st/fox-usa.m3u8?md5=dbcbe5ba2cda0235516f4e513fdb99a3&exp=1782336628',
     quality: '1080p',
-    protocol: 'HLS',
+    protocol: 'HLS Proxy',
     color: 'linear-gradient(135deg, rgba(200,20,20,0.15), rgba(100,10,10,0.05))',
     language: 'English',
     category: 'Sports',
