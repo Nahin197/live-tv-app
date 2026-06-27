@@ -140,6 +140,14 @@ io.on('connection', (socket) => {
     io.emit('hot_update', { channelId, isHot: true });
   });
 
+  socket.on('remove_hot', (channelId) => {
+    if (!channelId || !hotChannels.has(channelId)) return;
+    hotChannels.delete(channelId);
+    delete hotChannelsData[channelId];
+    saveHotChannels();
+    io.emit('hot_update', { channelId, isHot: false });
+  });
+
   socket.on('disconnect', () => {
     totalOnline = Math.max(0, totalOnline - 1);
     io.emit('viewer_update', { type: 'total', count: totalOnline });
@@ -178,6 +186,7 @@ app.use('/proxy', (req, res, next) => {
   const proxy = createProxyMiddleware({
     target: target.origin,
     changeOrigin: true,
+    secure: false,
     pathRewrite: () => target.pathname + target.search,
     onProxyReq: (proxyReq, req, res) => {
       // Spoof User-Agent, Origin, and Referer to bypass blocks on IPTV streams

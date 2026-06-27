@@ -305,12 +305,19 @@
 
         <!-- Hot Action Area -->
         <div class="hot-action-area" id="hotActionArea" style="display: none;">
-          <div class="hot-action-text">
+          <div class="hot-action-text" id="hotActionTextNormal">
             <div class="hot-action-title">Is this stream running smoothly?</div>
             <div class="hot-action-desc">Help others find this channel by marking it as <strong>HOT</strong>. If the quality is satisfying and buffer-free, vote to bump it to the #1 ranking!</div>
           </div>
+          <div class="hot-action-text" id="hotActionTextRemove" style="display: none;">
+            <div class="hot-action-title" style="color: #e74c3c;">This channel is HOT! 🔥</div>
+            <div class="hot-action-desc">If the stream quality has dropped or is buffering, you can remove its hot status to help others find better channels.</div>
+          </div>
           <button id="markHotBtn" class="btn-gold" onclick="markCurrentChannelHot()">
             <span class="btn-icon">🔥</span> Mark As Hot
+          </button>
+          <button id="removeHotBtn" class="btn-gold" style="display: none; background: rgba(231, 76, 60, 0.1); border-color: rgba(231, 76, 60, 0.3); color: #e74c3c;" onclick="removeCurrentChannelHot()">
+            <span class="btn-icon">❌</span> Remove Hot
           </button>
         </div>
       </div>
