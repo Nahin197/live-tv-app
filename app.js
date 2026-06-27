@@ -14,7 +14,7 @@ const CHANNELS = [
     name: "Bioscope",
     emoji: '📺',
     logo: "https://upload.wikimedia.org/wikipedia/en/e/e1/Bioscope%2B_logo.png",
-    url: "https://cricxtv.fun/bioscope.php?file=index_1_193443.ts?m=1782233562",
+    url: "https://cricxtv.fun/bioscope.php",
     quality: "1080p",
     protocol: "HLS Proxy",
     color: 'linear-gradient(135deg, rgba(200,20,20,0.15), rgba(100,10,10,0.05))',
