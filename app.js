@@ -53,7 +53,7 @@ const CHANNELS = [
     name: 'Fox FS1',
     emoji: '📺',
     logo: 'https://statics.foxsports.com/www.foxsports.com/content/uploads/2026/05/fox-world-cup-2026.jpg',
-    url: 'https://inproviszon.st/fox-usa.m3u8?md5=dbcbe5ba2cda0235516f4e513fdb99a3&exp=1782336628',
+    url: 'https://1nyaler.streamhostingcdn.top/stream/57/index.m3u8',
     quality: '1080p',
     protocol: 'HLS Proxy',
     color: 'linear-gradient(135deg, rgba(200,20,20,0.15), rgba(100,10,10,0.05))',
