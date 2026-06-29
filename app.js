@@ -10,6 +10,19 @@
 // ────────────────────────────────────────────────────────────
 const CHANNELS = [
   {
+    id: "fifa-tv",
+    name: "FIFA TV",
+    emoji: '📺',
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/FIFA_logo_without_slogan.svg/1200px-FIFA_logo_without_slogan.svg.png",
+    url: "https://auto.fifatv.qzz.io/stream2/index.m3u8",
+    quality: "1080p",
+    protocol: "HLS Proxy",
+    color: 'linear-gradient(135deg, rgba(200,20,20,0.15), rgba(100,10,10,0.05))',
+    language: "English",
+    category: 'Sports',
+    description: 'FIFA TV Live Stream'
+  },
+  {
     id: "bioscope",
     name: "Bioscope",
     emoji: '📺',

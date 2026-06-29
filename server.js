@@ -195,6 +195,8 @@ app.use('/proxy', (req, res, next) => {
       let spoofOrigin = target.origin;
       if (target.hostname.includes('fifalive.click')) {
         spoofOrigin = 'https://fifalive.click'; // just to be exactly sure
+      } else if (target.hostname.includes('fifatv.qzz.io')) {
+        spoofOrigin = 'https://fifatv.qzz.io';
       }
       proxyReq.setHeader('Origin', spoofOrigin);
       proxyReq.setHeader('Referer', spoofOrigin + '/');
