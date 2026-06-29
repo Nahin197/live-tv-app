@@ -202,6 +202,12 @@ app.use('/proxy', (req, res, next) => {
       proxyReq.setHeader('Referer', spoofOrigin + '/');
     },
     onProxyRes: (proxyRes, req, res) => {
+      // Remove original CORS headers to avoid duplicates
+      delete proxyRes.headers['access-control-allow-origin'];
+      delete proxyRes.headers['access-control-allow-methods'];
+      delete proxyRes.headers['access-control-allow-headers'];
+      delete proxyRes.headers['access-control-expose-headers'];
+      
       // Add CORS headers to the response
       proxyRes.headers['Access-Control-Allow-Origin'] = '*';
       proxyRes.headers['Access-Control-Allow-Methods'] = 'GET, OPTIONS';
