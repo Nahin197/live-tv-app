@@ -27,7 +27,7 @@ const CHANNELS = [
     name: "Bioscope",
     emoji: '📺',
     logo: "https://upload.wikimedia.org/wikipedia/en/e/e1/Bioscope%2B_logo.png",
-    url: "https://d1kep4defqj6r1.cloudfront.net/out/v1/4e21d5a122c549289dd6feab259266e8/index_1.m3u8",
+    url: "https://d1kep4defqj6r1.cloudfront.net/out/v1/4e21d5a122c549289dd6feab259266e8/index_2.m3u8",
     quality: "1080p",
     protocol: "HLS",
     color: 'linear-gradient(135deg, rgba(200,20,20,0.15), rgba(100,10,10,0.05))',
