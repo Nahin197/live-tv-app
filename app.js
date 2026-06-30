@@ -10,6 +10,20 @@
 // ────────────────────────────────────────────────────────────
 const CHANNELS = [
   {
+    id: 'fox-2',
+    name: 'Fox 2',
+    emoji: '📺',
+    logo: 'https://statics.foxsports.com/www.foxsports.com/content/uploads/2026/05/fox-world-cup-2026.jpg',
+    url: 'https://1nyaler.streamhostingcdn.top/stream/26/index.m3u8',
+    quality: '1080p',
+    protocol: 'HLS Proxy',
+    color: 'linear-gradient(135deg, rgba(200,20,20,0.15), rgba(100,10,10,0.05))',
+    language: 'English',
+    category: 'Sports',
+    description: 'Fox 2 Live Stream'
+  },
+
+  {
     id: "fifa-tv",
     name: "FIFA TV",
     emoji: '📺',
