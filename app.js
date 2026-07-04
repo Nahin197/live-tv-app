@@ -55,7 +55,7 @@ const CHANNELS = [
     name: "Bioscope",
     emoji: '📺',
     logo: "https://upload.wikimedia.org/wikipedia/en/e/e1/Bioscope%2B_logo.png",
-    url: "https://hls.diptom3ow.workers.dev/r/https%3A%2F%2Ffifa-stream-01.bioscopelive.com%2Fout%2Fv1%2F60e7608404004b1186261497b404630b%2Findex_2.m3u8",
+    url: "https://fifa-stream-01.bioscopelive.com/out/v1/60e7608404004b1186261497b404630b/index_2.m3u8",
     quality: "1080p",
     protocol: "HLS",
     color: 'linear-gradient(135deg, rgba(200,20,20,0.15), rgba(100,10,10,0.05))',
