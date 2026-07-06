@@ -81,7 +81,7 @@ const CHANNELS = [
     name: 'T Sports',
     emoji: '📺',
     logo: 'https://freekaj.com/assets/images/stock/image/2024/01/14/thumb_65a43e21ef5f41705262625.jpg',
-    url: 'https://trs1.aynaott.com/tsports/tracks-v1a1/mono.ts.m3u8?nocache=1782326741670',
+    url: 'https://flussonic.deltainfonet.com/01_Tsports_HD/tracks-v1a1/mono.m3u8',
     quality: '720p',
     protocol: 'HLS',
     color: 'linear-gradient(135deg, rgba(200,20,20,0.15), rgba(100,10,10,0.05))',
