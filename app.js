@@ -10,6 +10,20 @@
 // ────────────────────────────────────────────────────────────
 const CHANNELS = [
   {
+    id: 'servus-tv',
+    name: 'Servus Tv',
+    emoji: '📺',
+    logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlrN1GOTGSvylXY6NP8oIIX07C6Zc476fPVpeDbPiZhQ&s=10',
+    url: 'https://andro.evrenesoglu57.click/checklist/androstreamliveexn3.m3u8',
+    quality: '1080p',
+    protocol: 'HLS Proxy',
+    color: 'linear-gradient(135deg, rgba(200,20,20,0.15), rgba(100,10,10,0.05))',
+    language: 'German',
+    category: 'General',
+    description: 'Servus Tv Live Stream'
+  },
+
+  {
     id: 'soco-live',
     name: 'Soco Live',
     emoji: '📺',
