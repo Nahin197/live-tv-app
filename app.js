@@ -10,6 +10,20 @@
 // ────────────────────────────────────────────────────────────
 const CHANNELS = [
   {
+    id: 'tsn-2',
+    name: 'TSN 2',
+    emoji: '🍁',
+    logo: 'https://iconlogovector.com/uploads/images/2025/03/lg-67d80052de144-TSN.webp',
+    url: 'https://proxy.futuredesh.com/api/proxy?url=http%3A%2F%2F213.152.185.148%2Ftsn4%2Ftracks-v1a1%2Fmono.ts.m3u8',
+    quality: '1080p',
+    protocol: 'HLS Proxy',
+    color: 'linear-gradient(135deg, rgba(230,0,0,0.15), rgba(255,100,100,0.05))',
+    language: 'English',
+    category: 'Sports',
+    description: 'TSN 2 Sports Live'
+  },
+
+  {
     id: 'servus-tv',
     name: 'Servus Tv',
     emoji: '📺',
