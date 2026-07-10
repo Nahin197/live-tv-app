@@ -10,6 +10,20 @@
 // ────────────────────────────────────────────────────────────
 const CHANNELS = [
   {
+    id: 'tsn-3',
+    name: 'TSN 3',
+    emoji: '🍁',
+    logo: 'https://iconlogovector.com/uploads/images/2025/03/lg-67d80052de144-TSN.webp',
+    url: 'https://trophystream.com/cors-proxy/https/deviantart.lovetier.bz/TSN3/tracks-v1a1/mono.m3u8?token=VFNOM3xub19jaGVja19pcHwxNzgzMjgxOTA5.f3426120fd8cd6b749dd7d5a4ccff4d92e7aa1ed07c6fb9bfa4e7504d8d84d63',
+    quality: '1080p',
+    protocol: 'HLS Proxy',
+    color: 'linear-gradient(135deg, rgba(230,0,0,0.15), rgba(255,100,100,0.05))',
+    language: 'English',
+    category: 'Sports',
+    description: 'TSN 3 Sports Live'
+  },
+
+  {
     id: 'tsn-2',
     name: 'TSN 2',
     emoji: '🍁',
