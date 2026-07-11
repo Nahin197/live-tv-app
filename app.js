@@ -600,7 +600,7 @@ function renderChannelCards() {
         </div>
         ${ch.hot ? '<div class="card-hot-badge">🔥 HOT</div>' : ''}
       </div>
-      <div class="card-quality">${ch.quality} · ${ch.language} · ${ch.category}</div>
+      <div class="card-quality">${ch.quality.toLowerCase().includes('4k') ? ch.quality.replace(/4k/ig, '<span class="quality-4k">4K</span>') : ch.quality} · ${ch.language} · ${ch.category}</div>
       <button class="card-watch-btn">▶ Watch Live</button>
     `;
     return card;
@@ -649,7 +649,7 @@ function renderSidebarChannels() {
         <div class="sidebar-item-name" style="display: flex; align-items: center; gap: 6px; justify-content: center;">
           ${ch.name} ${ch.hot ? '<span class="sidebar-hot-icon" title="Hot Channel">🔥</span>' : ''}
         </div>
-        <div class="sidebar-item-quality">${ch.quality} · ${ch.language}</div>
+        <div class="sidebar-item-quality">${ch.quality.toLowerCase().includes('4k') ? ch.quality.replace(/4k/ig, '<span class="quality-4k">4K</span>') : ch.quality} · ${ch.language}</div>
       </div>
     `;
     sidebarChannels.appendChild(item);
