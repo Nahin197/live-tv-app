@@ -52,7 +52,6 @@ const CHANNELS = [
   },
 
   {
-      {
     id: 'tsn-1',
     name: 'TSN 1',
     emoji: '📺',
@@ -65,7 +64,8 @@ const CHANNELS = [
     category: 'Sports',
     description: 'TSN 1 Sports Live'
   },
-id: 'tsn-2',
+  {
+    id: 'tsn-2',
     name: 'TSN 2',
     emoji: '🍁',
     logo: 'https://iconlogovector.com/uploads/images/2025/03/lg-67d80052de144-TSN.webp',
