@@ -52,7 +52,20 @@ const CHANNELS = [
   },
 
   {
-    id: 'tsn-2',
+      {
+    id: 'tsn-1',
+    name: 'TSN 1',
+    emoji: '📺',
+    logo: 'https://iconlogovector.com/uploads/images/2025/03/lg-67d80052de144-TSN.webp',
+    url: 'https://fiveo4.casadenoval.uk/main/secure/b5fb7e5b307095b4f73250e3362cfd67e6e3a07983f09949e31e717639d9acc0/1784486442/tsn1-ca.m3u8',
+    quality: '1080p',
+    protocol: 'HLS',
+    color: 'linear-gradient(135deg, rgba(230,0,0,0.15), rgba(255,100,100,0.05))',
+    language: 'English',
+    category: 'Sports',
+    description: 'TSN 1 Sports Live'
+  },
+id: 'tsn-2',
     name: 'TSN 2',
     emoji: '🍁',
     logo: 'https://iconlogovector.com/uploads/images/2025/03/lg-67d80052de144-TSN.webp',
