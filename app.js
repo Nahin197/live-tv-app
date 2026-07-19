@@ -10,6 +10,20 @@
 // ────────────────────────────────────────────────────────────
 const CHANNELS = [
   {
+    id: "tudn",
+    name: "TUDN",
+    emoji: '📺',
+    logo: "https://assets.goal.com/images/v3/blt965b95412976cfad/TUDN.avif?auto=webp&format=pjpg&width=3840&quality=60",
+    url: "https://channel01-onlymex.akamaized.net/hls/live/2022749/event01/index_5.m3u8",
+    quality: "1080p",
+    protocol: "HLS",
+    color: 'linear-gradient(135deg, rgba(20,200,20,0.15), rgba(10,100,10,0.05))',
+    language: "Spanish",
+    category: 'Sports',
+    description: 'TUDN Live Stream'
+  },
+
+  {
     id: 'tsn-4',
     name: 'TSN 4',
     emoji: '🍁',
