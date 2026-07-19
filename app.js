@@ -97,7 +97,7 @@ const CHANNELS = [
     name: 'Soco Live',
     emoji: '📺',
     logo: 'https://yt3.googleusercontent.com/S9u8jCqfnFzWT0wcaJPtOhhr_PPCehyfSPHL9qqKcXzmOODAbgtuWYkZFs6BF-7Sr5Y0-s8_fw=s900-c-k-c0x00ffffff-no-rj',
-    url: 'https://pull.niues.live/live/stream-9912110_lhd.m3u8?auth_key=1782842183-0-0-99fa264a4405764c4dd243e81752cc2b',
+    url: 'https://pull.niues.live/live/stream-9912060_lhd.m3u8?auth_key=1783440983-0-0-',
     quality: '1080p',
     protocol: 'HLS Proxy', // Usually safe default for sports streams
     color: 'linear-gradient(135deg, rgba(200,20,20,0.15), rgba(100,10,10,0.05))',
